@@ -1,0 +1,122 @@
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --tema1-white: #ffffff;
+  --tema1-white-soft: #f8f8f8;
+  --tema1-white-mute: #f2f2f2;
+  --tema1-white-modal:rgba(242, 242, 242,0.7);
+
+  --tema2-black: #181818;
+  --tema2-black-soft: #222222;
+  --tema2-black-mute: #282828;
+  --tema2-black-modal: rgba(40, 40, 40, 0.7);
+  --tema2-blue1-dark: #0784b5;
+  --tema2-blue2-dark: #39ace7;
+  --tema2-green1-dark:#32ae85;
+  --tema2-green2-dark:#27e8a7;
+  --tema2-red1-dark:#df4576;
+
+  --tema-indigo: #2c3e50;
+  --tema-border: #39ace7;
+  --tema1-divider-light-1: rgba(60, 60, 60, 0.29);
+  --tema1-divider-light-2: rgba(60, 60, 60, 0.10);
+  --tema1-divider-light-: rgba(235, 235, 235, 0.82);
+  --tema2-divider-dark-1: rgba(84, 84, 84, 0.65);
+  --tema2-divider-dark-2: rgba(84, 84, 84, 0.48);
+  --tema2-divider-dark-3: rgba(84, 84, 84, 0.48);
+
+  --tema1-text-light-1: var(--tema2-black-soft);
+  --tema1-text-light-2: rgba(60, 60, 60, 0.80);
+  --tema2-text-dark-1: var(--tema1-white);
+  --tema2-text-dark-2: rgba(235, 235, 235, 0.64);
+  --tema1-blue1-light: #0078D4;
+  --tema1-blue2-light: #39ace7;
+  --tema1-green1-light:#32ae85;
+  --tema1-green2-light:#27e8a7;
+  --tema1-red1-light:#df4576;
+  --tema1-red2-light:#E83A4B;
+  --tema1-yellow-light:#E8E23A;
+}
+
+/* semantic color variables for this project */
+:root {
+  --color-background-soft: var(--tema1-white);
+  --color-background: var(--tema1-white-soft);
+  --color-background-sidebar: var(--tema1-white-mute);
+  --color-background-mute: var(--tema1-white-mute);
+  --color-background-modal: var(--tema1-white-modal);
+  
+
+  --color-border: var(--tema1-divider-light-2);
+  --color-border2: var(--tema1-divider-light-3);
+  --color-border-hover: var(--tema1-divider-light-1);
+
+  --color-heading: var(--tema1-text-light-1);
+  --color-text: var(--tema1-text-light-1);
+  --color-heading1: var(--tema1-text-light-2);
+  --color-text2: var(--tema1-text-light-2);
+  --color-detail1-blue:var(--tema1-blue1-light);
+  --color-detail2-blue:var(--tema1-blue2-light);
+  --color-detail1-green:var(--tema1-green1-light);
+  --color-detail2-green:var(--tema1-green2-light);
+  --color-detail1-red:var(--tema1-red1-light);
+  /* --section-gap: 160px; */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--tema2-black);
+    --color-background-soft: var(--tema2-black-soft);
+    --color-background-sidebar: var(--tema2-black-soft);
+    --color-background-mute: var(--tema2-black-mute);
+    --color-background-modal: var(--tema2-black-modal);
+
+    --color-border: var(--tema2-divider-dark-2);
+    --color-border2: var(--tema1-divider-dark-3);
+    --color-border-hover: var(--tema2-divider-dark-1);
+
+    --color-heading: var(--tema2-text-dark-1);
+    --color-text: var(--tema2-text-dark-2);
+    --color-heading1:var(--tema2-text-dark-2);
+    --color-text1:var(--tema2-text-dark-2);
+    --color-detail1-blue:var(--tema2-blue1-dark);
+    --color-detail2-blue:var(--tema2-blue2-dark);
+    --color-detail1-green:var(--tema2-green1-dark);
+    --color-detail2-green:var(--tema2-green2-dark);
+    --color-detail1-red:var(--tema2-red1-dark);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition:
+    color 0.5s,
+    background-color 0.5s;
+  line-height: 1.6;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    Oxygen,
+    Ubuntu,
+    Cantarell,
+    'Fira Sans',
+    'Droid Sans',
+    'Helvetica Neue',
+    sans-serif;
+  font-size: 14px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
