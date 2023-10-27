@@ -1,33 +1,52 @@
-<script setup>
+<script>
 import { RouterLink, RouterView } from 'vue-router'
 import Headers from './components/Headers.vue';
 import SideBars from './components/SideBars.vue';
 import Home from './views/Home.vue';
 
-
+export default{
+  components:{
+    Headers,
+    SideBars,
+    RouterLink, RouterView
+  },
+  data(){
+    return{
+        modeoEscuro: true
+    }
+  },
+  methods:{
+    trocarTema (modeoEscuroAtivo){
+      console.log(modoEscuro)
+      // this.modeoEscuroAtivo=modeoEscuroAtivo
+    }
+  }
+}
 
 </script>
 
 <template>
-  <header class="header__app">
-    <Headers />
-    <div id="tema">
-    <ThemeSwitcher />
-  </div>
-  </header>
-  <div class="content">
-    <div class="container__sidebar">
-      <SideBars/>
+  <main class="modo-escuro" :class="{ 'modo-escuro': modoEscuro}">
+    <header class="header__app" >
+      <Headers @aoTemaAlterao="trocarTema"/>
+      
+    </header>
+    <div class="content">
+      <div class="container__sidebar">
+        <SideBars/>
+      </div>
+      <div class="container__main">
+       
+  
+      </div>
     </div>
-    <div class="container__main">
-      <!-- <Home/> -->
+    <RouterView />
 
-    </div>
-  </div>
-  <RouterView />
+  </main>
 </template>
 
 <style scoped>
+
 .content{
   display: flex;
   flex-direction: column;
@@ -66,6 +85,10 @@ import Home from './views/Home.vue';
   z-index: 0;
   top:50px;
   left: 50px;
+}
+
+h2{
+  color: var(--color-text);
 }
 
 @media screen and (max-width: 450px){

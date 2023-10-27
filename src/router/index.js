@@ -27,6 +27,15 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/cadastropaciente/:id/',
+      name: 'CadastroPaciente',
+      // route level code-splitting
+      // this generates a separate chunk (About.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: () => import('../views/CadastroPaciente.vue'),
+      props: true,
+    },
+    {
       path: '/financeiro',
       name: 'Financeiro',
       // route level code-splitting

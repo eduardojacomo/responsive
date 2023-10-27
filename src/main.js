@@ -3,6 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+// import VueMask from '@devindex/vue-mask'; 
 import VMask from 'v-mask'
 // import ThemeSwitcher from './components/ThemeSwitcher.vue';
 
@@ -36,8 +37,8 @@ library.add(faBell, faSliders, faHouse, faAddressCard, faCalendar, faMoneyBills,
 
 const app = createApp(App)
 
-app.use(router, VMask)
-// app.use(VMask)
+app.use(router)
+
 app.component('font-awesome-icon', FontAwesomeIcon)
 // app.component('ThemeSwitcher', ThemeSwitcher)
 // new Vue({

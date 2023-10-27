@@ -2,11 +2,9 @@
     <div class="main__container">
       <Modal @close="toogleModal" :modalActive="modalActive">
         <div class="modal-content">
-          <CadastroPaciente/>
+          <!-- <CadastroPaciente/> -->
         </div>
-        <!-- <div class="modal-content" v-else>
-          <CadastroPaciente :id="0"/>
-        </div> -->
+      7
       </Modal>
       <div class="rows__content">
     
@@ -32,10 +30,12 @@
           </div>
           
           <div class="btn__acoes">
-            <button @click="toogleModal" type="button">
+            <router-link :to="{name: 'CadastroPaciente', params: { id: 0 } }">
+              <button type="button">
               <font-awesome-icon icon="fa-solid fa-user-plus" class="icon__buton" />
               Novo Paciente
             </button>
+            </router-link>
           </div>
 
       </div>
@@ -164,6 +164,10 @@ import CadastroPaciente from '../views/CadastroPaciente.vue';
   /* margin: 0 1rem 0 0; */
   
 }
+
+/* .btn__acoes router-link{
+
+} */
 
 .btn__acoes button {
   

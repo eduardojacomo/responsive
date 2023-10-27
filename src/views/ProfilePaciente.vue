@@ -9,7 +9,8 @@
                     </div>
                     <div class="dadosprincipais">
                         <h2>{{pacientes.nome}}</h2>
-                        <h3 ></h3>
+                        <h3 >{{ getAge }} / {{ pacientes.dataNascimento }}</h3>
+                        <input type="text" v-model="dtnasc">
                         <h3>{{pacientes.cidade}}/{{ pacientes.uf }}</h3>
                         <h3>{{pacientes.profissao}}</h3>
                     </div>
@@ -61,36 +62,7 @@
                         <Tab title="Terapia"> 
                             <div class="profile_terapia">
                                 {{ pacientes }}
-                                <!-- <div class="column_tab">
-                                    <h3>Crenças Nucleares</h3>
-                                    <ul>
-                                        <li>Desamor: Eu não sou amada ou aceita.</li>
-                                        <li>Inadequação: "Eu sou um fracasso ou sou inferior aos outros."</li>
-                                        <li>Perigo: "O mundo é um lugar perigoso."</li>
-                                        <li>Controle: "Eu preciso controlar tudo."</li>
-                                        <li>Bem-estar: "Eu preciso ser perfeito para ser feliz</li>
-                                    </ul>
-                                </div>
-                                <div class="column_tab">
-                                    <h3>Crenças Intermediarias</h3>
-                                    <ul>
-                                        <li>Se eu não for perfeito, serei rejeitado.</li>
-                                        <li>Se eu fizer algo errado, serei punido.</li>
-                                        <li>Se eu me expor, serei magoado.</li>
-                                        <li>Se eu não fizer tudo o que posso, não sou bom o suficiente.</li>
-                                        <li>Se eu não controlar tudo, algo ruim vai acontecer.</li>
-                                    </ul>
-                                </div>
-                                <div class="column_tab">
-                                    <h3>Crenças Nucleares</h3>
-                                    <ul>
-                                        <li>Desamor: Eu não sou amada ou aceita.</li>
-                                        <li>Inadequação: "Eu sou um fracasso ou sou inferior aos outros."</li>
-                                        <li>Perigo: "O mundo é um lugar perigoso."</li>
-                                        <li>Controle: "Eu preciso controlar tudo."</li>
-                                        <li>Bem-estar: "Eu preciso ser perfeito para ser feliz</li>
-                                    </ul>
-                                </div> -->
+
                             </div>
                         </Tab>
                         <Tab title="Dados"> 
@@ -165,39 +137,54 @@
 <script setup>
 import Tab from '../components/Tab.vue';
 import TabWrapper from '../components/TabWrapper.vue';
-import {onMounted, computed, ref} from 'vue';
+import {onMounted, computed, ref, watch} from 'vue';
 import api from '../services/api';
 
-name:"ProfilePaciente",
+name:"ProfilePaciente"
         
-function getAge(dateString) {
-    const today = new Date();
-    const birthDate = new Date(dateString);
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
+// function getAge(dateString) {
+//     const today = new Date();
+//     const birthDate = new Date(dateString);
+//     let age = today.getFullYear() - birthDate.getFullYear();
+//     const m = today.getMonth() - birthDate.getMonth();
 
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--;
-    }
+//     if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+//         age--;
+//     }
 
-    return age;
-}
+//     return age;
+// }
 
 const props = defineProps({
             id: Number,
             required: true
         })
 
+
 const pacientes = ref ([]);
-const idade = computed(() => getAge(pacientes.dataNascimento.value));
-const apiUrl = "/Paciente/PacientesCompleto"+props.id;
+
 const fetchPacientes = async () => await api.get("/Paciente/PacientesCompleto"+props.id).then((response)=>
     (pacientes.value = response.data)
     );
 
-onMounted(
+    onMounted(
     fetchPacientes  
     );
+    const dtnasc = ref('');
+    watch(pacientes.dataNascimento, async (dtnasc)=>{
+        dtnasc=pacientes.dataNascimento;
+    })     
+    const getAge = computed( () => { 
+    let currentDate = new Date(); 
+    
+    let birthDate = new Date(dtnasc); 
+    let difference = currentDate.getFullYear() - birthDate.getFullYear(); 
+    let year1 = currentDate.getFullYear();
+    let year2 = birthDate.getFullYear();
+    let age = birthDate; 
+    console.log(year2);
+    return pacientes.dataNascimento; 
+});
 </script>
 
 <style scoped>
@@ -367,27 +354,6 @@ onMounted(
     font-weight: 400;
     color: var(--color-text);
   }
-
-  .cards{
-    display: flex;
-    /* flex-flow: 1 1 450px; */
-    flex-wrap: wrap;
-    padding: .2rem;
-    flex-direction: row;
-    gap: .5rem;
-  }
-  
-  .cards_items{
-    display: flex;
-    flex-grow: 1;
-    flex-basis: 200px;
-    width: 200px;
-    height: 150px;
-    border: 1px solid var(--color-border);
-    border-radius: 8px;
-    background-color: var(--color-background-soft);
-  }
-
   .tabs{
     height: auto;
     width: 650px;

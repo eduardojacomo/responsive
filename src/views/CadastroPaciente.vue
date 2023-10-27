@@ -2,20 +2,23 @@
     <div class="main">
         <h2>Cadastro de Clientes</h2>
           <div class="formulario">
-            <form action="#non" method="post" class="form_register-paciente">
-				<div class="foto">
-                    <img src="../assets/p1.png" alt="">
-                </div>
+           
+				<!-- <div class="avatar">
+                    <img src="../assets/p1.png" alt="" class="avatar__profile">
+                </div> -->
 				<div class="campos">
                     <div class="dados__gerais-paciente">
                         <div class="row">
-                            <input name="nomePaciente" id="nomePaciente" type="text" placeholder="Nome do paciente .." required >
+                            <label>
+                                <input name="nomePaciente" v-model="pac.nome" class="input" id="nomePaciente" type="text" placeholder="" required >
+                                <span>Nome</span>
+                            </label>
                         </div>
 
                         <div class="row">
                             <div class="checkbox">
                                 <div class="custom-select">
-                                <select class="personalizado" id="estcivil_pac">
+                                <select class="personalizado" id="estcivil_pac" v-model="pac.estadocivil">
                                         <option value="0" selected disabled>Estado Cívil</option>
                                         <option value="1">Solteiro(a)</option>
                                         <option value="2">Casado(a)</option>
@@ -28,7 +31,7 @@
                             </div>
                             <div class="checkbox">
                                 <div class="custom-select">
-                                    <select class="personalizado" id="sexo_pac">
+                                    <select class="personalizado" id="sexo_pac" v-model="pac.sexo">
                                         <option value="0" selected disabled>Sexo</option>
                                         <option value="1">Masculino</option>
                                         <option value="2">Feminino</option>
@@ -42,30 +45,54 @@
                         </div>
 
                         <div class="row">
-                            <input name="profissaoPaciente" id="profissao_pac" type="text" placeholder="Profissão .." required >
-                            <input name="cpfPaciente" id="cpf_pac" type="text" maxlenght="11" placeholder="CPF .." required >
+                            <label>
+                                <input name="profissaoPaciente" id="profissao_pac" v-model="pac.profissao" class="input" type="text" placeholder="" required >
+                                <span>Profissão</span>
+                            </label>
+                            <label>
+                                <input name="cpfPaciente" id="cpf_pac" type="text" class="input" v-model="pac.cpf" maxlenght="11" placeholder="" required >
+                                <span>CPF</span>
+                            </label>
                         </div>
 
                         <div class="row">
-                            <input type="text" name="dataNasc" id="dataNasc" maxlenght="10" placeholder="Data de Nascimento" required>
+                            <label>
+                                <input type="date" name="dataNasc" id="dataNasc" v-model="pac.dataNascimento" maxlenght="10" class="input" placeholder="" required>
+                                <span>Data de Nascimento</span>
+                            </label>
                         </div>
 
                         <div class="row">
-                            <input name="celPaciente" id="cel_pac" type="text" placeholder="Celular .." required >
-                            <input name="emailPaciente" id="email_pac" type="text" placeholder="Email .." required >
+                            <label>
+                                <input name="celPaciente" id="cel_pac" v-model="pac.celular" type="text" class="input" placeholder="" required >
+                                <span>Celular</span>
+                            </label>
+                            <label>
+                                <input name="emailPaciente" id="email_pac" v-model="pac.email" type="text" class="input" placeholder="" required >
+                                <span>E-mail</span>
+                            </label>
                         </div>
                         <div class="row">
-                            <input name="celContato" id="cel_contato_pac" type="text" placeholder="Contato de emergência .." required >
-                            <input name="nomeContato" id="nomeconto_pac" type="text" placeholder="Nome do Contato .." required >
+                            <label>
+                                <input name="celContato" id="cel_contato_pac" v-model="pac.contatoEmergencia" type="text" class="input" placeholder="" required >
+                                <span>Contato de emergência</span>
+                            </label>
+                            <label>
+                                <input name="nomeContato" id="nomeconto_pac" v-model="pac.nomeContato" type="text" class="input" placeholder="" required >
+                                <span>Nome do contato</span>
+                            </label>
                         </div>
                     </div>
                     
                     <div class="endereco-paciente">
                         <div class="row">
-                        <input name="cepPaciente" type="text" placeholder="Digite o CEP .." required v-mask="'##.###-###'">
+                        <label>
+                            <input name="cepPaciente" v-model="pac.cep" type="text" class="input" placeholder="" required>
+                            <span>CEP</span>
+                        </label>
                         <div class="checkbox">
                             <div class="custom-select" id="uf_pac"> 
-                            <select>
+                            <select v-model="pac.uf">
                                 <option value="0" selected disabled>UF</option>
                                 <option value="1">RJ</option>
                                 <option value="2">SP</option>
@@ -77,20 +104,36 @@
                     </div>
 
                     <div class="row">
-                        <input name="endPaciente" id="rua_pac" type="text" placeholder="Rua/Avenida .." required >
-                        
+                        <label>
+                            <input name="endPaciente" id="rua_pac" type="text" v-model="pac.endereco" class="input" placeholder="" required >
+                            <span>Endereço</span>
+                        </label>
                     </div>
 
                     <div class="row">
-                                            
-                            <input name="numPaciente" id="numend_pac" type="text" placeholder="Nº .." required >
-                            <input name="compPaciente" id="compend_pac" type="text" placeholder="Complemento ..">
+                            <label>
+                                <input name="numPaciente" id="numend_pac" v-model="pac.numero" type="text" class="input" placeholder="" required >
+                                <span>Número</span>
+                            </label> 
+                            <label>
+                                <input type="text" class="input" v-model="pac.complemento" placeholder="" required >
+                                <span>Complemento</span>
+                            </label> 
+                            <!-- <label>
+                                <input name="compPaciente" id="compend_pac" type="text" class="input" placeholder="">
+                                <span>Complemento</span>
+                            </label>                -->
                     </div>
 
                     <div class="row">
-
-                        <input name="bairroPaciente" id="bairro_pac" type="text" placeholder="Bairro .." required >
-                        <input name="cidadePaciente" id="cidade_pac" type="text" placeholder="Cidade .." required >
+                        <label>
+                            <input name="bairroPaciente" id="bairro_pac" v-model="pac.bairro" type="text" class="input" placeholder="" required >
+                            <span>Bairro</span>
+                        </label>
+                        <label>
+                            <input name="cidadePaciente" id="cidade_pac" v-model="pac.cidade" type="text" class="input" placeholder="" required >
+                            <span>Cidade</span>
+                        </label>
                         
                         
                         
@@ -107,20 +150,22 @@
                     <br/>
                     <div class="botoes">
                     <div class="btnconfirmar">
-                        <button type="submit" class="btncad_pac">Confirmar</button>
+                        <button class="btncad_pac" @click="postPacientes">Confirmar</button>
                     </div>
                    
 
                 </div>
                 </div>
 				
-			</form>
+		
 
         </div>
     </div>
 </template>
 
 <script setup>
+import Tab from '../components/Tab.vue';
+import TabWrapper from '../components/TabWrapper.vue';
 import {onMounted, computed, ref} from 'vue';
 import api from '../services/api';
 
@@ -129,34 +174,131 @@ const props = defineProps({
             id: Number,
             required: true
         })
+
+const pacientes = ref ([]);
+
+
+const pac = ref ({
+    id:'',
+    nome: '',
+    cidade: '',
+    uf: '',
+    celular: '',
+    sexo: '',
+    dataNascimento: '',
+    endereco: '',
+    numero: '',
+    complemento: '',
+    bairro: '',
+    cpf: '',
+    cep: '',
+    email: '',
+    dataCadastro: '',
+    dataAlteracao: '',
+    codigo: '',
+    contatoEmergencia: '',
+    nomeContato: '',
+    profissao: '',
+    estadocivil:''
+})
+const fetchPacientes = async () => await api.get("/Paciente/PacientesCompleto"+props.id).then((response)=>
+    (pacientes.value = response.data)
+    );
+
+const postPacientes = () => {
+    api.post("/Paciente", JSON.stringify( {
+        nome: pac.nome,
+    cidade: pac.cidade,
+    uf: pac.uf,
+    celular: pac.celular,
+    sexo: pac.sexo,
+    dataNascimento: pac.dataNascimento,
+    endereco: pac.endereco,
+    numero: pac.numero,
+    complemento: pac.complemento,
+    bairro: pac.bairro,
+    cpf: pac.cpf,
+    cep: pac.cep,
+    email: pac.email,
+    dataCadastro: new Date().toDateString(),
+    dataAlteracao: new Date().toDateString(),
+    codigo: '0',
+    contatoEmergencia: pac.contatoEmergencia,
+    nomeContato: pac.nomeContato,
+    profissao: pac.profissao,
+    estadocivil: pac.estadocivil
+    }). then(response => {console.log(response)})
+    .catch(function (error) {
+    console.error(error);
+  })
+)}
+onMounted(
+    fetchPacientes  
+    );
+
 </script>
 
 <style scoped>
+
+.main{
+    padding: 50px 1rem 0 180px;
+}
+
 form{
     display: flex;
     flex-wrap: wrap;
 
 }
 
-/* .formulario{
+.formulario{
     display: flex;
     flex-direction: column;
     padding: 2rem;
-    
-  } */
-  .formulario input {
+   
+  }
+
+  .formulario label {
+  position: relative;
+  }
+
+  .formulario label .input {
+
     font-size:16px;
     border:1px solid var(--tema-border);
     border-radius: 8px;
-    padding:10px;
+    padding:15px 5px 5px 10px;
     background: var(--color-background);
     color: var(--color-text);
     width: 25vw;
-    height: 37px;
+    height: 40px;
     display: flex;
     flex-flow: 1 0 250px;
-  }
+  outline: 0;
+}
 
+.formulario label .input + span {
+  color: var(--color-text);
+  position: absolute;
+  left: 15px;
+  top: 0px;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.formulario label .input:placeholder-shown + span {
+  top: 12.5px;
+  font-size: 1em;
+}
+
+.formulario label .input:focus + span,
+.formulario label .input:valid + span {
+  color: var(--color-label-blue);
+  top: 0px;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+  
   .formulario input[type='checkbox']{
     height: auto;
   }
@@ -164,44 +306,35 @@ form{
   .campos{
     display: flex;
     flex-direction: column;
-    width: 75%;
+    
+    padding: 1rem 2rem;
+    
   }
 
-  .foto{
-    display: flex;
-    width: 25%;
-    height: 200px;
-  }
+  .avatar{
+        display:flex;
+        height: auto;
+        width: auto;
+    }
 
-  .foto img{
-    width: 90%;
-    height: 90%;
-  }
+    .avatar__profile{
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 2px solid var(--color-detail2-blue);
+    }
+
   .botoes{
     display: flex;
     flex-direction: column; 
   }
 
-  .dados__gerais-paciente{
-    display: flex;
-    flex-direction: column;
-    
-    /* flex-flow: 1 1 420px; */
-  }
 
-  .endereco-paciente{
-    display: flex;
-    flex-direction: column;
-  }
-  .row{
+  /* .row{
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap:1rem;
-    flex-grow: 1;
 
-  }
+  } */
   
   #nomePaciente, #rua_pac{
     /* min-width: 320px; */
@@ -278,7 +411,7 @@ form{
 .btnconfirmar{
     display: flex;
     justify-content: flex-end;
-    margin-right: 40px;
+    /* margin-right: 40px; */
 }
 
 .btncad_pac:hover{
@@ -292,16 +425,7 @@ form{
     .formulario{
         padding: 0.5rem;
     }
-
-    .foto{
-        width: 100%;
-        
-    }
-
-    .foto img{
-        width: 100%;
-        height: 100%;
-    }
+   
 
     .campos{
         width: 100%;

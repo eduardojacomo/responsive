@@ -14,7 +14,7 @@ export default {
 <style scoped>
     .card__atendimento{
       background-color: var(--color-background-mute);
-      border: 1px solid var(--color-background-soft);
+      border: 1px solid var(--color-border);
       border-radius: 8px;
       display: flex;
       flex-direction: row;

@@ -344,7 +344,7 @@ export default {
       }
     }
     .cardatendimento{
-      margin:.5rem 0.5rem 0 0;
+      margin:.5rem 0rem 0 0;
       padding: 0 1px 0 0;
     }
 
