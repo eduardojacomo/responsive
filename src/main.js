@@ -3,6 +3,7 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
+import VMask from 'v-mask'
 // import ThemeSwitcher from './components/ThemeSwitcher.vue';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -28,12 +29,15 @@ import { faIdBadge} from '@fortawesome/free-solid-svg-icons'
 import { faUserPlus} from '@fortawesome/free-solid-svg-icons'
 import { faTable, faList, faCircleXmark} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faBell, faSliders, faHouse, faAddressCard, faCalendar, faMoneyBills, faMagnifyingGlass, faNotesMedical, faCoins, faComments, faListCheck, faInbox, faCircleCheck, faClock, faBars, faFilter, faUserPen, faIdBadge, faUserPlus, faTable, faList, faCircleXmark)
+library.add(faBell, faSliders, faHouse, faAddressCard, faCalendar, faMoneyBills, faMagnifyingGlass, 
+    faNotesMedical, faCoins, faComments, faListCheck, faInbox, faCircleCheck, faClock, faBars, faFilter, 
+    faUserPen, faIdBadge, faUserPlus, faTable, faList, faCircleXmark)
 
 
 const app = createApp(App)
 
-app.use(router)
+app.use(router, VMask)
+// app.use(VMask)
 app.component('font-awesome-icon', FontAwesomeIcon)
 // app.component('ThemeSwitcher', ThemeSwitcher)
 // new Vue({

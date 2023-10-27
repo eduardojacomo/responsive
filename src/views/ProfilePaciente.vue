@@ -8,10 +8,10 @@
                         <img src="../assets/p12.png" class="avatar__profile">
                     </div>
                     <div class="dadosprincipais">
-                        <h2>Maria Silva Pereira</h2>
-                        <h3>29 anos</h3>
-                        <h3>Fotografa</h3>
-                        <p>Ela buscou terapia para tratar a ansiedade e melhorar a organização.</p>
+                        <h2>{{pacientes.nome}}</h2>
+                        <h3 ></h3>
+                        <h3>{{pacientes.cidade}}/{{ pacientes.uf }}</h3>
+                        <h3>{{pacientes.profissao}}</h3>
                     </div>
                 </div>
 
@@ -32,20 +32,7 @@
             </div>
 
             <div class="row1">
-                <!-- <div class="cards">
-                    <div class="cards_items">
-                        8 meses de terapia
-                    </div>
-                    <div class="cards_items">
-                        25 tarefas concluidas
-                    </div>
-                    <div class="cards_items">
-                        8 meses de terapia
-                    </div>
-                     <div class="cards_items">
-                        25 tarefas concluidas
-                    </div> 
-                </div>-->
+                
                 <div class="tabs">
                     <TabWrapper>
                         <Tab title="Financeiro"> 
@@ -53,11 +40,11 @@
                                 <form>
                                     <div>
                                         <label>Valor da Terapia</label>
-                                        <input type="text" class="valor-terapia">
+                                        <input type="text" class="valor-terapia" v-model="pacientes.valorTerapia" >
                                     </div>
                                     <div>
                                         <label>Dia de Vencimento</label>
-                                        <input type="text" class="dia-vencimento">
+                                        <input type="text" class="dia-vencimento" v-model="pacientes.vencimento">
                                     </div>
                                     <div class="tipo__cobranca">
                                         <p>Tipo de cobrança</p>
@@ -108,8 +95,8 @@
                         </Tab>
                         <Tab title="Dados"> 
                             <div class="dados__content">
-                                <h3>Dia terapia: Terça-Feira</h3>
-                                <h3>Hora: 15:00</h3>
+                                <h3>Dia terapia: {{pacientes.diaTerapia}}</h3>
+                                <h3>Hora: {{pacientes.horaTerapia}}</h3>
                                 <h3>Frequencia das sessões: Semanal</h3>
                                 <br/>
                                 <h3>Próximas Sessões</h3>
@@ -175,30 +162,42 @@
     </div>    
 </template>
 
-<script>
+<script setup>
 import Tab from '../components/Tab.vue';
 import TabWrapper from '../components/TabWrapper.vue';
-import {onMounted, ref} from 'vue';
+import {onMounted, computed, ref} from 'vue';
 import api from '../services/api';
-export default {
-    name:"ProfilePaciente",
-    components:{
-        Tab,
-        TabWrapper
-    }, 
-    setup(){
-     
-      const pacientes = ref ([]);
 
+name:"ProfilePaciente",
+        
+function getAge(dateString) {
+    const today = new Date();
+    const birthDate = new Date(dateString);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const m = today.getMonth() - birthDate.getMonth();
 
-    const fetchPacientes = async () => await api.get("/Paciente").then((response)=>
-      (pacientes.value = response.data)
-     );
-
-    onMounted(fetchPacientes);
-    return {pacientes}
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
     }
+
+    return age;
 }
+
+const props = defineProps({
+            id: Number,
+            required: true
+        })
+
+const pacientes = ref ([]);
+const idade = computed(() => getAge(pacientes.dataNascimento.value));
+const apiUrl = "/Paciente/PacientesCompleto"+props.id;
+const fetchPacientes = async () => await api.get("/Paciente/PacientesCompleto"+props.id).then((response)=>
+    (pacientes.value = response.data)
+    );
+
+onMounted(
+    fetchPacientes  
+    );
 </script>
 
 <style scoped>

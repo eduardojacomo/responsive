@@ -35,7 +35,7 @@
                                 <a href="#">Sair</a>
                             </div>
                             
-                            <a class="cabecalho__avatar"> <img src="../assets/renata.png" class="avatar"></a>
+                            <a class="cabecalho__avatar"> <img src="../assets/p21.png" class="avatar"></a>
                         </div>
 
                     </li>

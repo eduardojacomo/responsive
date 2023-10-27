@@ -16,9 +16,7 @@ export default {
       background-color: var(--color-background-mute);
       border: 1px solid var(--color-background-soft);
       border-radius: 8px;
-      margin: 01rem 0 0rem 1rem;
       display: flex;
-      /* align-content: flex-end; */
       flex-direction: row;
       flex-grow: 1;
       flex-basis: 100px 90px;

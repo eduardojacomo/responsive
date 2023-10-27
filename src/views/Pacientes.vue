@@ -4,6 +4,9 @@
         <div class="modal-content">
           <CadastroPaciente/>
         </div>
+        <!-- <div class="modal-content" v-else>
+          <CadastroPaciente :id="0"/>
+        </div> -->
       </Modal>
       <div class="rows__content">
     
@@ -12,8 +15,9 @@
             <div class="busca__paciente">
             
               <form>
-                <input type="text" placeholder="Localizar.." name="search">
+                <input type="text" class="filtro" v-model="localizapaciente" placeholder="Localizar.." name="search">
                 <button type="submit"><font-awesome-icon icon="fa-solid fa-magnifying-glass"/></button>
+                
               </form>
             </div>
           <div class="filtro_paciente">
@@ -54,6 +58,7 @@
       </div>
 
       <div class="row">
+        
           <table id="pacientes" class="table__pacientes">
             <tr class="titulo_tabela">
               <th></th>
@@ -64,142 +69,62 @@
               <th>Status</th>
               <th> </th>
             </tr>
-            <tr v-for="pac in pacientes" :key="pac.id">
+            <tr v-for="paciente in filteredPacientes" :key="paciente.id">
               <td><img class="avatar" src="../assets/p12.png"></td>
-              <td>{{pac.nome}}</td>
-              <td>{{pac.celular}}</td>
-              <td>{{ pac.cidade }}/{{ pac.uf }}</td>
-              <td>{{ pac.diaTerapia }} - {{ pac.horaTerapia }}</td>
-              <td>{{ pac.status }}</td>
+              <td>{{paciente.nome}}</td>
+              <td>{{paciente.celular}}</td>
+              <td>{{ paciente.cidade }}/{{ paciente.uf }}</td>
+              <td>{{ paciente.diaTerapia }} - {{ paciente.horaTerapia }}</td>
+              <td>{{ paciente.status }}</td>
               <td>
                 <!-- <router-link to="/" class="side__link"><font-awesome-icon icon="fa-solid fa-house" /> Home</router-link> -->
                 <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-user-pen" /></button>
-                <router-link to="/ProfilePaciente" class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-id-badge" /></router-link>
+                <router-link :to="{name: 'ProfilePaciente', params: { id: paciente.id } }" class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-id-badge" /></router-link>
               </td>
             </tr>
-            <!-- <tr>
-              <td><img class="avatar" src="../assets/p13.png"></td>
-              <td>João Pedro</td>
-              <td>11 97102 2265</td>
-              <td>São Paulo /SP</td>
-              <td>Sexta-Feira 11:00</td>
-              <td>Novo</td>
-              <td>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-user-pen" /></button>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-id-badge" /></button>
-              </td>
-            </tr>
-            <tr>
-              <td><img class="avatar" src="../assets/p27.png"></td>
-              <td>Livia Maria</td>
-              <td>24 98110 0025</td>
-              <td>Volta Redonda /RJ</td>
-              <td>Quarta-Feira 16:00</td>
-              <td>Concluido</td>
-              <td>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-user-pen" /></button>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-id-badge" /></button>
-              </td>
-            </tr>
-            <tr>
-              <td><img class="avatar" src="../assets/p20.png"></td>
-              <td>Leandro Leal</td>
-              <td>21 92305 1020</td>
-              <td>Rio de Janeiro /RJ</td>
-              <td>Terça-Feira 15:00</td>
-              <td>Em tratamento</td>
-              <td>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-user-pen" /></button>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-id-badge" /></button>
-              </td>
-            </tr>
-            <tr>
-              <td><img class="avatar" src="../assets/p15.png"></td>
-              <td>Julia Silva</td>
-              <td>24 99920 1010</td>
-              <td>Barra Mansa /RJ</td>
-              <td>Segunda-Feira 17:00</td>
-              <td>Em tratamento</td>
-              <td>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-user-pen" /></button>
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-id-badge" /></button>
-              </td>
-            </tr> -->
+        
            
           </table>
         </div>
 
-      <!-- <div>
-        <h4>teste api</h4>
-        <div v-for="pac in pacientes" :key="pac.id">
-          <h5>{{ pac.nome }}</h5>
-          <h5>{{ pac.celular }}</h5>
-          <h5>{{ pac.cidade }}/{{ pac.uf }}</h5>
-          <h5>{{ pac.diaTerapia }} - {{ pac.horaTerapia }}</h5>
-          <h5>{{ pac.status }}</h5>
-
-        </div> 
-      </div>-->  
     </div>
   
   </div>
 </template>
 
-<script>
-import Modal from '../components/Modal.vue';
-import {onMounted, ref} from 'vue';
-import CadastroPaciente from '../views/CadastroPaciente.vue';
+<script setup>
+import { computed, ref } from 'vue';
 import api from '../services/api';
-export default {
-  name:"Pacientes",
-  components:{
-    Modal,
-    CadastroPaciente
-  },
-  data (){
-      return{
-        id: null,
-            nome: null,
-            codigo: null,
-            endereco: null,
-            celular: null, 
-            email: null,
-            cidade: null,
-            uf:null,
-            diaTerapia:null,
-            horaTerapia:null,
-            status:null
-      }
-            
-  },
-  setup(){
+import Modal from '../components/Modal.vue';
+import CadastroPaciente from '../views/CadastroPaciente.vue';
+      
+    const localizapaciente = ref('');
+    const pacientes = ref ([]);
+
     const modalActive = ref(false);
 
     const toogleModal = () => {
       modalActive.value = !modalActive.value;
     }
     
-    const pacientes = ref ([]);
+    const fetchItems = async () => {
+        const response = await api.get('/Paciente/PacientesCompleto');
+        pacientes.value = await response.data;
+    };   
+    fetchItems();
 
+     const filteredPacientes = computed(() => {
+       return pacientes.value.filter((paciente) => paciente.nome.toLowerCase().includes(localizapaciente.value.toLowerCase()));
+     });
 
-    const fetchPacientes = async () => await api.get("/Paciente/PacientesCompleto").then((response)=>
-      (pacientes.value = response.data)
-     );
-
-    onMounted(fetchPacientes);
-
-    return {modalActive, toogleModal, pacientes};
-  }
-  
-}
-
+    
 </script>
 
 <style>
 
 .main__container{
     display: flex;
-    width: auto;
+    width: 100%;
     flex-wrap: wrap;
     justify-content:space-between;
     padding: 50px 1rem 1rem 205px  ;
@@ -455,6 +380,8 @@ export default {
     table th:nth-child(4), table td:nth-child(4) {
     display: none;
   }
-     
+  
+
+
   }
 </style>
