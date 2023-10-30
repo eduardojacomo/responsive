@@ -6,6 +6,7 @@
         <router-link to="/sessao" class="side__link"><font-awesome-icon icon="fa-solid fa-calendar" /> Sessao</router-link>
         <router-link to="/financeiro" class="side__link"><font-awesome-icon icon="fa-solid fa-money-bills" /> Financeiro</router-link>
         <router-link to="/documentos" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Documentos</router-link>
+        <router-link to="/usuarios" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Usuarios</router-link>
   </div>
 
   <div id="menuToggle" class="hamburguer-menu">
@@ -31,6 +32,9 @@
       </router-link>
       <router-link to="/documentos" class="rounter-hamb">
         <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-notes-medical"/>Documentos</li>
+      </router-link>
+      <router-link to="/usuarios" class="rounter-hamb">
+        <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-notes-medical"/>Usuarios</li>
       </router-link>
       
     </ul>
