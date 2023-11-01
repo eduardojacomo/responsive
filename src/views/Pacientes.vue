@@ -78,7 +78,7 @@
               <td>{{ paciente.status }}</td>
               <td>
                 <!-- <router-link to="/" class="side__link"><font-awesome-icon icon="fa-solid fa-house" /> Home</router-link> -->
-                <button class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-user-pen" /></button>
+                <router-link :to="{name: 'CadastroPaciente', params: { id: paciente.id } }" class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-user-pen" /></router-link>
                 <router-link :to="{name: 'ProfilePaciente', params: { id: paciente.id } }" class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-id-badge" /></router-link>
               </td>
             </tr>

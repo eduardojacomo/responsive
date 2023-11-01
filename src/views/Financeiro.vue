@@ -1,7 +1,18 @@
 <template>
     <div class="main">
-
-        <input v-model="filtro">
+        <div class="formulario">
+            <label>
+                <!-- <input name="nomePaciente" v-model="pacienteData.nome" class="input" id="nomePaciente" type="text" placeholder="" required > -->
+                <input v-model="filtro" placeholder="" class="input" required="false">
+                <span>Nome</span>
+            </label>
+            <label>
+                <!-- <input name="nomePaciente" v-model="pacienteData.nome" class="input" id="nomePaciente" type="text" placeholder="" required > -->
+                <input v-model="filtro1" placeholder="" class="input" required>
+                <span>teste</span>
+            </label>
+        </div>
+        
         {{ filtro }}
         <div class="result">
             <ul>

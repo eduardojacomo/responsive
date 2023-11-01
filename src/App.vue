@@ -2,7 +2,6 @@
 import { RouterLink, RouterView } from 'vue-router'
 import Headers from './components/Headers.vue';
 import SideBars from './components/SideBars.vue';
-import Home from './views/Home.vue';
 
 export default{
   components:{
@@ -12,13 +11,20 @@ export default{
   },
   data(){
     return{
-        modeoEscuro: true
+        modeoEscuroAtivo: false
     }
   },
   methods:{
     trocarTema (modeoEscuroAtivo){
-      console.log(modoEscuro)
-      // this.modeoEscuroAtivo=modeoEscuroAtivo
+      // console.log(modoEscuro),
+      this.modeoEscuroAtivo=modeoEscuroAtivo
+      // if( modeoEscuroAtivo){
+      //   setTheme('dark')
+      // } else{
+      //   setTheme('light')
+      // }
+
+      // const setTheme = theme => document.documentElement.className = theme;
     }
   }
 }
@@ -26,9 +32,9 @@ export default{
 </script>
 
 <template>
-  <main class="modo-escuro" :class="{ 'modo-escuro': modoEscuro}">
+  <main class="modo-escuro" :class="{ 'modo-escuro':modoEscuroAtivo}">
     <header class="header__app" >
-      <Headers @aoTemaAlterao="trocarTema"/>
+      <Headers @aoTemaAlterado="trocarTema"/>
       
     </header>
     <div class="content">
@@ -45,7 +51,7 @@ export default{
   </main>
 </template>
 
-<style scoped>
+<style>
 
 .content{
   display: flex;
@@ -80,15 +86,52 @@ export default{
   min-height: 100vh;
   position: relative;
 }
-#tema{
-  position:absolute;
-  z-index: 0;
-  top:50px;
-  left: 50px;
+
+
+h2, h3, h4, h5{
+  color: var(--color-text);
 }
 
-h2{
+.formulario label {
+  position: relative;
+  }
+
+  .formulario label .input {
+
+    font-size:16px;
+    border:1px solid var(--tema-border);
+    border-radius: 8px;
+    padding:15px 5px 5px 10px;
+    background: var(--color-background);
+    color: var(--color-text);
+    width: 25vw;
+    height: 40px;
+    display: flex;
+    flex-flow: 1 0 250px;
+  outline: 0;
+}
+
+.formulario label .input + span {
   color: var(--color-text);
+  position: absolute;
+  left: 15px;
+  top: 0px;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.formulario label .input:placeholder-shown + span {
+  top: 12.5px;
+  font-size: 1em;
+}
+
+.formulario label .input:focus + span,
+.formulario label .input:valid + span {
+  color: var(--color-label-blue);
+  top: 0px;
+  font-size: 0.7em;
+  font-weight: 600;
 }
 
 @media screen and (max-width: 450px){

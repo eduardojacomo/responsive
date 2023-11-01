@@ -9,8 +9,8 @@
                     </div>
                     <div class="dadosprincipais">
                         <h2>{{pacientes.nome}}</h2>
-                        <h3 >{{ getAge }} / {{ pacientes.dataNascimento }}</h3>
-                        <input type="text" v-model="dtnasc">
+                        <h3 >{{ calculeAge() }} </h3>
+                        
                         <h3>{{pacientes.cidade}}/{{ pacientes.uf }}</h3>
                         <h3>{{pacientes.profissao}}</h3>
                     </div>
@@ -163,28 +163,35 @@ const props = defineProps({
 
 const pacientes = ref ([]);
 
+const dtNasc = ref();
+
+async function fetchPacienteTeste(){
+    await api.get("/Paciente/PacientesCompleto"+props.id)
+        .then((response)=> {
+            pacientes.value = response.data;
+        }
+    );
+}
+
 const fetchPacientes = async () => await api.get("/Paciente/PacientesCompleto"+props.id).then((response)=>
     (pacientes.value = response.data)
     );
 
-    onMounted(
-    fetchPacientes  
-    );
-    const dtnasc = ref('');
-    watch(pacientes.dataNascimento, async (dtnasc)=>{
-        dtnasc=pacientes.dataNascimento;
-    })     
-    const getAge = computed( () => { 
+    onMounted(async() => {
+        fetchPacienteTeste();
+        calculeAge();
+    });
+   
+    function calculeAge(){
     let currentDate = new Date(); 
     
-    let birthDate = new Date(dtnasc); 
+    let birthDate = new Date(pacientes.value.dataNascimento); 
     let difference = currentDate.getFullYear() - birthDate.getFullYear(); 
     let year1 = currentDate.getFullYear();
     let year2 = birthDate.getFullYear();
-    let age = birthDate; 
-    console.log(year2);
-    return pacientes.dataNascimento; 
-});
+    let age = difference; 
+    return age; 
+    }
 </script>
 
 <style scoped>

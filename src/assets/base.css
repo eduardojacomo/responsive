@@ -40,31 +40,33 @@
 }
 
 /* semantic color variables for this project */
-:root {
-  --color-background-soft: var(--tema1-white);
-  --color-background: var(--tema1-white-soft);
-  --color-background-sidebar: var(--tema1-white-mute);
-  --color-background-mute: var(--tema1-white-mute);
-  --color-background-modal: var(--tema1-white-modal);
+@media (prefers-color-scheme: light){
+  :root {
+    --color-background-soft: var(--tema1-white);
+    --color-background: var(--tema1-white-soft);
+    --color-background-sidebar: var(--tema1-white-mute);
+    --color-background-mute: var(--tema1-white-mute);
+    --color-background-modal: var(--tema1-white-modal);
+    
+    --color-label-blue: var(--tema2-blue3-light);
+    --color-border: var(--tema1-divider-light-2);
+    --color-border2: var(--tema1-divider-light-3);
+    --color-border-hover: var(--tema1-divider-light-1);
   
-  --color-label-blue: var(--tema2-blue3-light);
-  --color-border: var(--tema1-divider-light-2);
-  --color-border2: var(--tema1-divider-light-3);
-  --color-border-hover: var(--tema1-divider-light-1);
-
-  --color-heading: var(--tema1-text-light-1);
-  --color-text: var(--tema1-text-light-1);
-  --color-heading1: var(--tema1-text-light-2);
-  --color-text2: var(--tema1-text-light-2);
-  --color-detail1-blue:var(--tema1-blue1-light);
-  --color-detail2-blue:var(--tema1-blue2-light);
-  --color-detail3-blue: var(--tema2-blue3-light);
-  --color-detail1-green:var(--tema1-green1-light);
-  --color-detail2-green:var(--tema1-green2-light);
-  --color-detail1-red:var(--tema1-red1-light);
-  /* --section-gap: 160px; */
+    --color-heading: var(--tema1-text-light-1);
+    --color-text: var(--tema1-text-light-1);
+    --color-heading1: var(--tema1-text-light-2);
+    --color-text2: var(--tema1-text-light-2);
+    --color-detail1-blue:var(--tema1-blue1-light);
+    --color-detail2-blue:var(--tema1-blue2-light);
+    --color-detail3-blue: var(--tema2-blue3-light);
+    --color-detail1-green:var(--tema1-green1-light);
+    --color-detail2-green:var(--tema1-green2-light);
+    --color-detail1-red:var(--tema1-red1-light);
+    /* --section-gap: 160px; */
+  }
+  
 }
-
  @media (prefers-color-scheme: dark) {
   :root {
     --color-background: var(--tema2-black);

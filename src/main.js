@@ -3,8 +3,9 @@ import './assets/main.css'
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-// import VueMask from '@devindex/vue-mask'; 
-import VMask from 'v-mask'
+
+
+
 // import ThemeSwitcher from './components/ThemeSwitcher.vue';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -40,9 +41,5 @@ const app = createApp(App)
 app.use(router)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
-// app.component('ThemeSwitcher', ThemeSwitcher)
-// new Vue({
-//     el: '#app',
-//     render: h => h(App),
-//   });
+
 app.mount('#app')

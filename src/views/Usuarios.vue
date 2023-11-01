@@ -15,20 +15,9 @@ import api from '../services/api';
 const usuario = ref('');
 const senha = ref('');
 const email = ref('');
-// const pacientepost={
-//             usuario: usuario,
-//             senha: senha,
-//             email: email
-//         };
+
 async function postUser(){
-    //  api.post('Usuario', JSON.parse(JSON.stringify(this.pacientepost))
-    //  ).then((response) => {
-    //      console.log(response)
-    //      .catch((error)=> {
-    //         console.log(err.response)
-    //      });
-    //  })
-    // console.log(pacientepost);
+   
     api.post('/usuario', {
     usuario: usuario.value,
     senha: senha.value,
