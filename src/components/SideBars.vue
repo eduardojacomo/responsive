@@ -7,6 +7,7 @@
         <router-link to="/financeiro" class="side__link"><font-awesome-icon icon="fa-solid fa-money-bills" /> Financeiro</router-link>
         <router-link to="/documentos" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Documentos</router-link>
         <router-link to="/usuarios" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Usuarios</router-link>
+        <router-link to="/login" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Login</router-link>
   </div>
 
   <div id="menuToggle" class="hamburguer-menu">

@@ -40,8 +40,9 @@
 }
 
 /* semantic color variables for this project */
-@media (prefers-color-scheme: light){
-  :root {
+
+  :root 
+ {
     --color-background-soft: var(--tema1-white);
     --color-background: var(--tema1-white-soft);
     --color-background-sidebar: var(--tema1-white-mute);
@@ -66,9 +67,11 @@
     /* --section-gap: 160px; */
   }
   
-}
+
  @media (prefers-color-scheme: dark) {
-  :root {
+  :root
+   
+  {
     --color-background: var(--tema2-black);
     --color-background-soft: var(--tema2-black-soft);
     --color-background-sidebar: var(--tema2-black-soft);

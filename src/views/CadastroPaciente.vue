@@ -90,10 +90,10 @@ onMounted(async() => {
                                 <div class="custom-select">
                                 <select class="personalizado" id="estcivil_pac" v-model="pacienteData.estadocivil">
                                         <option value="0" selected disabled>Estado Cívil</option>
-                                        <option value="1">Solteiro(a)</option>
-                                        <option value="2">Casado(a)</option>
-                                        <option value="3">Divorciado(a)</option>
-                                        <option value="4">Viuvo(a)</option>  
+                                        <option value="Solteiro(a)">Solteiro(a)</option>
+                                        <option value="Casado(a)">Casado(a)</option>
+                                        <option value="Divorciado(a)">Divorciado(a)</option>
+                                        <option value="Viuvo(a)">Viuvo(a)</option>  
                                 </select>
                             </div>
                                 <div class="select_arrow">
@@ -103,9 +103,9 @@ onMounted(async() => {
                                 <div class="custom-select">
                                     <select class="personalizado" id="sexo_pac" v-model="pacienteData.sexo">
                                         <option value="0" selected disabled>Sexo</option>
-                                        <option value="1">Masculino</option>
-                                        <option value="2">Feminino</option>
-                                        <option value="3">Outro</option>
+                                        <option value="Masculino">Masculino</option>
+                                        <option value="Feminino">Feminino</option>
+                                        <option value="Outro">Outro</option>
                                     </select>
                                     
                                 </div>
@@ -164,8 +164,8 @@ onMounted(async() => {
                             <div class="custom-select" id="uf_pac"> 
                             <select v-model="pacienteData.uf">
                                 <option value="0" selected disabled>UF</option>
-                                <option value="1">RJ</option>
-                                <option value="2">SP</option>
+                                <option value="RJ">RJ</option>
+                                <option value="SP">SP</option>
                             </select>
                             </div>
                             <div class="select_arrow">
@@ -248,7 +248,7 @@ onMounted(async() => {
    
   }
 
-  .formulario label {
+  /* .formulario label {
   position: relative;
   }
 
@@ -288,7 +288,7 @@ onMounted(async() => {
   top: 0px;
   font-size: 0.7em;
   font-weight: 600;
-}
+} */
   
   .formulario input[type='checkbox']{
     height: auto;
@@ -426,8 +426,7 @@ onMounted(async() => {
         gap: 0.5rem;
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
-        align-items: flex-start;
+        
     }
 
     #nomePaciente, #rua_pac{

@@ -1,4 +1,5 @@
 <script>
+import {ref} from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import Headers from './components/Headers.vue';
 import SideBars from './components/SideBars.vue';
@@ -11,19 +12,26 @@ export default{
   },
   data(){
     return{
-        modeoEscuroAtivo: false
+        modeoEscuroAtivo: false,
+        
     }
   },
   methods:{
     trocarTema (modeoEscuroAtivo){
       // console.log(modoEscuro),
-      this.modeoEscuroAtivo=modeoEscuroAtivo
-      // if( modeoEscuroAtivo){
-      //   setTheme('dark')
-      // } else{
-      //   setTheme('light')
-      // }
-
+      this.modeoEscuroAtivo=modeoEscuroAtivo;
+      const theme= ref('');
+      if(modeoEscuroAtivo) {
+        theme.value= 'dark';
+        console.log(theme);
+        document.documentElement.className = theme.value;
+      }
+      else{
+        theme.value= 'light';
+        console.log(theme)
+        document.documentElement.className = theme.value;
+      }
+       
       // const setTheme = theme => document.documentElement.className = theme;
     }
   }

@@ -363,6 +363,7 @@ import CadastroPaciente from '../views/CadastroPaciente.vue';
   color: var(--color-text);
   font-size: 16px;
   cursor: pointer;
+  margin: 0 5px;
 }
 .btn-table-pac:hover{
   
