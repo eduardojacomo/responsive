@@ -2,19 +2,28 @@
     import api from '../services/api';
     import { loginData } from '../services/loginData';
     import { useRouter } from 'vue-router';
+  
 
     const router = useRouter();
+    
     async function login (){
-    await api.post('/usuario/login', loginData.value)
+    await api.post('/usuario/login', loginData.value, {withCredentials:true, credentials:include})
    
     .then((response) => {
-          console.log(response)
-          
-    })
+        // this.$cookies.set('token',response.data.token);
+        
+        // console.log(response);
+        //  router.push('/');
+        if (response.status === 200) {
+            const token = response.data;
+            sessionStorage.setItem('token', token)
+            router.push('/');
+        }
+        })
     .catch((error) => {
         console.error(error);
     });
-  await router.push('/');
+ 
 }
 
 </script>

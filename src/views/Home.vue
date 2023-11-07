@@ -1,20 +1,44 @@
-<script>
+<script setup>
+import {onMounted, ref} from 'vue';
 import GraficoPizza from '../components/GraficoPizza.vue';
 import GraficoBarra from '../components/GraficoBarra.vue';
 import GraficoDoughnut from '../components/GraficoDoughnut.vue';
 import CardAtendimento from '../components/Cards/CardAtendimento.vue';
 import CardDash from '../components/Cards/CardDash.vue';
-export default {
+import api from '../services/api';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router';
 
-  name:"Home",
-  components:{
-    GraficoPizza,
-    GraficoBarra,
-    GraficoDoughnut,
-    CardAtendimento,
-    CardDash
-  }
+const message = ref('Você não esta logado');
+const usuarios = ref ([]);
+const store = useStore();
+const router = useRouter();
+
+async function getUserLogin(){
+    // api.defaults.headers.common["Authorization"] =
+    //             "Bearer " + localStorage.getItem("jwt");
+    try{
+      await api.get("/Usuario/BuscarUsuarios")
+          .then((response)=> {
+            usuarios.value = response.data;
+            message.value = usuarios.usuario;
+            console.log(response);
+            console.log(usuarios.value);
+            
+            store.dispatch('setAuth', true);
+          }
+      )} catch(e){
+        store.dispatch('setAuth', false);
+        router.push('/login');
+      }
+      return {index: message}  
 }
+
+onMounted(async() => {
+        getUserLogin();
+        
+    });
+
 </script>
 
 <template>
@@ -22,7 +46,7 @@ export default {
     <div class="dash__container">
 
         <div class="titulo__container">
-          <h2>Olá, Renata</h2>
+          <h2>Olá, Renata - {{ message.usuario }}</h2>
           <p class="texto__boas-vindas">Que bom te ver por aqui! Temos bastante trabalho hoje!!</p>
         </div>
 

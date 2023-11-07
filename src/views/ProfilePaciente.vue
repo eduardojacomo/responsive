@@ -173,9 +173,9 @@ async function fetchPacienteTeste(){
     );
 }
 
-const fetchPacientes = async () => await api.get("/Paciente/PacientesCompleto"+props.id).then((response)=>
-    (pacientes.value = response.data)
-    );
+// const fetchPacientes = async () => await api.get("/Paciente/PacientesCompleto"+props.id).then((response)=>
+//     (pacientes.value = response.data)
+//     );
 
     onMounted(async() => {
         fetchPacienteTeste();
