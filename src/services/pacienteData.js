@@ -1,12 +1,12 @@
-import { ref } from 'vue';
+import { ref, reactive } from 'vue';
 
-const pacienteData = ref({
+let pacienteData = reactive({
     nome:ref(''),
     cidade:ref(''),
-    uf:ref(''),
+    uf:ref('0'),
     celular:ref(''),
-    sexo:ref(''),
-    dataNascimento:ref(''),
+    sexo:ref('0'),
+    dataNascimento:ref('1990-01-01'),
     endereco:ref(''),
     numero:ref(''),
     complemento:ref(''),
@@ -20,7 +20,7 @@ const pacienteData = ref({
     contatoEmergencia:ref(''),
     nomeContato:ref(''),
     profissao:ref(''),
-    estadocivil:ref('')
+    estadocivil:ref('0')
 });
 
 export { pacienteData };

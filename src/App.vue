@@ -1,41 +1,26 @@
-<script>
-import {ref} from 'vue'
+<script setup>
+import {onMounted, ref} from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
-import Headers from './components/Headers.vue';
-import SideBars from './components/SideBars.vue';
+import Headers from './components/Menus/Headers.vue';
+import SideBars from './components/Menus/SideBars.vue';
+import { useAuth } from './store/modules/auth';
 
-export default{
-  components:{
-    Headers,
-    SideBars,
-    RouterLink, RouterView
-  },
-  data(){
-    return{
-        modeoEscuroAtivo: false,
-        
-    }
-  },
-  methods:{
-    trocarTema (modeoEscuroAtivo){
-      // console.log(modoEscuro),
-      this.modeoEscuroAtivo=modeoEscuroAtivo;
-      const theme= ref('');
-      if(modeoEscuroAtivo) {
-        theme.value= 'dark';
-        console.log(theme);
-        document.documentElement.className = theme.value;
-      }
-      else{
-        theme.value= 'light';
-        console.log(theme)
-        document.documentElement.className = theme.value;
-      }
-       
-      // const setTheme = theme => document.documentElement.className = theme;
-    }
-  }
-}
+const auth = useAuth();
+
+
+// export default{
+//   components:{
+//     Headers,
+//     SideBars,
+//     RouterLink, RouterView
+//   },
+//   data(){
+//     return{
+//         modeoEscuroAtivo: false,
+//         autenticado: false,
+//     }
+//   },
+  
 
 </script>
 
@@ -47,7 +32,7 @@ export default{
     </header>
     <div class="content">
       <div class="container__sidebar">
-        <SideBars/>
+        <SideBars v-if="auth.user"/>
       </div>
       <div class="container__main">
        

@@ -1,10 +1,10 @@
 <template>
-    <div class="main__container">
+    <div class="main__container" v-if="auth">
       <Modal @close="toogleModal" :modalActive="modalActive">
         <div class="modal-content">
           <!-- <CadastroPaciente/> -->
         </div>
-      7
+      
       </Modal>
       <div class="rows__content">
     
@@ -70,7 +70,7 @@
               <th> </th>
             </tr>
             <tr v-for="paciente in filteredPacientes" :key="paciente.id">
-              <td><img class="avatar" src="../assets/p12.png"></td>
+              <td><img class="avatar" src="../assets/p18.png"></td>
               <td>{{paciente.nome}}</td>
               <td>{{paciente.celular}}</td>
               <td>{{ paciente.cidade }}/{{ paciente.uf }}</td>
@@ -93,14 +93,14 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, ref, onBeforeMount } from 'vue';
 import api from '../services/api';
 import Modal from '../components/Modal.vue';
-import CadastroPaciente from '../views/CadastroPaciente.vue';
+import { useAuth } from '../store/modules/auth';
       
     const localizapaciente = ref('');
     const pacientes = ref ([]);
-
+    const auth = useAuth();
     const modalActive = ref(false);
 
     const toogleModal = () => {
@@ -116,6 +116,10 @@ import CadastroPaciente from '../views/CadastroPaciente.vue';
      const filteredPacientes = computed(() => {
        return pacientes.value.filter((paciente) => paciente.nome.toLowerCase().includes(localizapaciente.value.toLowerCase()));
      });
+
+     onBeforeMount(async() => {
+      await auth.getAuth();
+    });
 
     
 </script>

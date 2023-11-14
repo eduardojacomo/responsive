@@ -1,9 +1,9 @@
 import './assets/main.css'
 
-import { createApp } from 'vue'
+import { createApp, markRaw } from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store/index'
+import { createPinia } from 'pinia'
 
 // import ThemeSwitcher from './components/ThemeSwitcher.vue';
 
@@ -29,16 +29,20 @@ import { faUserPen} from '@fortawesome/free-solid-svg-icons'
 import { faIdBadge} from '@fortawesome/free-solid-svg-icons'
 import { faUserPlus} from '@fortawesome/free-solid-svg-icons'
 import { faTable, faList, faCircleXmark} from '@fortawesome/free-solid-svg-icons'
+import {faFileImage} from '@fortawesome/free-regular-svg-icons'
 
 library.add(faBell, faSliders, faHouse, faAddressCard, faCalendar, faMoneyBills, faMagnifyingGlass, 
     faNotesMedical, faCoins, faComments, faListCheck, faInbox, faCircleCheck, faClock, faBars, faFilter, 
-    faUserPen, faIdBadge, faUserPlus, faTable, faList, faCircleXmark)
+    faUserPen, faIdBadge, faUserPlus, faTable, faList, faCircleXmark, faFileImage)
 
-
+const pinia = createPinia()
+pinia.use(({store})=>{
+    store.router = markRaw(router);
+} )
 const app = createApp(App)
 
 app.use(router)
-app.use(store)
+app.use(pinia)
 app.component('font-awesome-icon', FontAwesomeIcon)
 
 app.mount('#app')

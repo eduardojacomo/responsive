@@ -1,52 +1,56 @@
 <script setup>
-import {onMounted, ref} from 'vue';
-import GraficoPizza from '../components/GraficoPizza.vue';
-import GraficoBarra from '../components/GraficoBarra.vue';
-import GraficoDoughnut from '../components/GraficoDoughnut.vue';
+import {onBeforeMount, ref} from 'vue';
+import GraficoPizza from '../components/Graficos/GraficoPizza.vue';
+import GraficoBarra from '../components/Graficos/GraficoBarra.vue';
+import GraficoDoughnut from '../components/Graficos/GraficoDoughnut.vue';
 import CardAtendimento from '../components/Cards/CardAtendimento.vue';
 import CardDash from '../components/Cards/CardDash.vue';
 import api from '../services/api';
-import { useStore } from 'vuex';
-import { useRouter } from 'vue-router';
 
-const message = ref('Você não esta logado');
+import { useRouter } from 'vue-router';
+import { useAuth } from '../store/modules/auth';
+
+
 const usuarios = ref ([]);
-const store = useStore();
+const auth = useAuth();
 const router = useRouter();
 
-async function getUserLogin(){
-    // api.defaults.headers.common["Authorization"] =
-    //             "Bearer " + localStorage.getItem("jwt");
-    try{
-      await api.get("/Usuario/BuscarUsuarios")
-          .then((response)=> {
-            usuarios.value = response.data;
-            message.value = usuarios.usuario;
-            console.log(response);
-            console.log(usuarios.value);
-            
-            store.dispatch('setAuth', true);
-          }
-      )} catch(e){
-        store.dispatch('setAuth', false);
-        router.push('/login');
-      }
-      return {index: message}  
+// async function getUserLogin(){
+//     try{
+//       await api.get("/Usuario/BuscarUsuarios")
+//           .then((response)=> {
+//             usuarios.value = response.data;
+//             message.value = usuarios.usuario;
+//             auth
+//           }
+//       )} catch(e){
+        
+//         router.push('/login');
+//       }
+//       return message  
+// }
+
+async function islogin(){
+  await auth.getAuth();
+  // console.log(auth.user);
+   if (!auth.user){
+     router.push('/login');
+   }
 }
 
-onMounted(async() => {
-        getUserLogin();
-        
+onBeforeMount(async() => {
+        // getUserLogin();
+        await islogin();
     });
 
 </script>
 
 <template>
-  <div class="main__container">
+  <div class="main__container" v-if="auth.user">
     <div class="dash__container">
 
         <div class="titulo__container">
-          <h2>Olá, Renata - {{ message.usuario }}</h2>
+          <h2>Olá, Renata </h2>
           <p class="texto__boas-vindas">Que bom te ver por aqui! Temos bastante trabalho hoje!!</p>
         </div>
 

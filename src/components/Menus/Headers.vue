@@ -6,7 +6,7 @@
             <h1 class="logo__item" href="#">LOGO</h1>
 
             <div class="cabecalho__indicadores">
-                <ul class="cabecalho__icones">
+                <ul class="cabecalho__icones" v-if="auth.user">
                     <li>
                         <button class="cabecalho__icones-items" href="#">
                             <font-awesome-icon icon="fa-solid fa-bell" style="color: #ffffff;" />
@@ -15,13 +15,13 @@
                     <li>
                         <div class="dropdown">
                 
-                            <div class="dropdown-content">
+                            <div class="dropdown-content" >
                                 <a href="#">Perfil</a>
                                 <a href="#">Configurar</a>
                                 <a href="#">Sair</a>
                             </div>
                             
-                            <a class="cabecalho__avatar"> <img src="../assets/p21.png" class="avatar"></a>
+                            <a class="cabecalho__avatar"> <img src="../../assets/p21.png" class="avatar"></a>
                         </div>
 
                     </li>
@@ -31,7 +31,16 @@
                             <span class="slider"></span>
                         </label>
                     </li>
+                    <li>
+                        <button @click="logout">Logout</button>
+                    </li>
                 </ul>
+                <ul class="cabecalho__icones" v-else>
+                    <li>
+                        <router-link to="/login" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Login</router-link>
+                    </li>
+                </ul>
+
             </div>
 
             
@@ -41,23 +50,37 @@
     </header>
 </template>
 
-<script>
-export default {
-    name:"Headers",
-    emits: ['aoTemaAlterado'],
-    data(){
-        return{
-            modeoEscuroAtivo: false
-        }
-    },
-    methods:{
-        alterarTema(){
-            this.modeoEscuroAtivo = !this.modeoEscuroAtivo
-            this.$emit('aoTemaAlterado', this.modeoEscuroAtivo)
-            console.log("alterado")
-        }
-    }
+<script setup>
+import {onMounted, ref} from 'vue'
+import { useRouter } from 'vue-router';
+import api from '../../services/api';
+import { useAuth } from '../../store/modules/auth';
+
+const auth = useAuth();
+
+const router = useRouter();
+
+
+async function logout(){
+    // await api.post('/usuario/logout', '', {withCredentials:true})
+    // .then((response) => {
+    //     if (response.status === 200) {
+    //         router.push('/login');
+    //     }
+    //     })
+    // .catch((error) => {
+    //     console.error(error);
+    // });
+    auth.logoutAuth();
+    // if (!auth.user){
+    //     router.push('/login');
+    // }
 }
+
+onMounted(async() => {
+    await auth.getAuth();
+        
+    });
 </script>
 
 <style scoped>
@@ -126,10 +149,20 @@ export default {
         align-items: center;
         list-style-type: none;
     }
-
+    
     .cabecalho__icones a :hover{
         background-color: var(--tema2-blue1-dark);
     }
+
+    .side__link {
+        
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 16px;
+        color: var(--color-text);
+        display: block;
+    }
+
     .avatar {
         vertical-align: middle;
         width: 30px;

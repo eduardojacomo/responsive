@@ -35,7 +35,7 @@ export default {
         /* border-bottom: none; */
         border-top-left-radius: 8px;
         border-top-right-radius: 8px;
-        justify-content: center;
+        justify-content: flex-start;
         text-align: center;
         padding: 0 10px;
     }
@@ -52,7 +52,8 @@ export default {
     }
 
     .tabs__header li.selected {
-        background-color: var(--color-detail2-blue);
-        color: var(--color-text2);
+        /* background-color: var(--color-detail2-blue); */
+        border-bottom: solid 3px var(--color-detail2-blue);
+        color: var(--color-text);
     }
 </style>

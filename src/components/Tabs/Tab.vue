@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { Title } from 'chart.js';
+// import { Title } from 'chart.js';
 import {inject} from 'vue'
 
 export default {

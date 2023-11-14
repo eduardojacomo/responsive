@@ -67,8 +67,20 @@
 </template>
 
 <script>
+// import {computed} from 'vue';
+// import {useStore} from 'vuex';
+
 export default {
-    name: "Sidebars"
+    name: "Sidebars",
+    // setup(){
+    //         const store = useStore();
+    //         const auth = computed(()=> store.state.authenticated)
+    
+    //         return {
+    //             auth
+    //         }
+    //       },
+
 }
 </script>
 

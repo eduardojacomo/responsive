@@ -135,8 +135,8 @@
 </template>
 
 <script setup>
-import Tab from '../components/Tab.vue';
-import TabWrapper from '../components/TabWrapper.vue';
+import Tab from '../components/Tabs/Tab.vue';
+import TabWrapper from '../components/Tabs/TabWrapper.vue';
 import {onMounted, computed, ref, watch} from 'vue';
 import api from '../services/api';
 
@@ -281,6 +281,10 @@ async function fetchPacienteTeste(){
         /* flex-flow: 1 1 150px; */
         max-width: 250px;
         min-width: 210px;
+        /* background-color: var(--color-background-mute);
+        border: solid 1px var(--color-border);
+        border-radius: 8px;
+        padding: 1rem; */
     }
 
     .timeline ul {
@@ -336,6 +340,7 @@ async function fetchPacienteTeste(){
         max-width: 85%;
         padding: .3rem;
         border-radius: 8px;
+        background-color: var(--color-background-mute);
         border: 1px solid var(--color-border);
     }
   .time {
