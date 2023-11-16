@@ -2,10 +2,10 @@
     <div class="sidebar">
         <router-link to="/" class="side__link"><font-awesome-icon icon="fa-solid fa-house" /> Home</router-link>
         <router-link to="/pacientes" class="side__link"><font-awesome-icon icon="fa-solid fa-address-card" /> Pacientes</router-link>
-        <router-link to="/agenda" class="side__link"><font-awesome-icon icon="fa-solid fa-calendar" /> Agenda</router-link>
+        <!-- <router-link to="/agenda" class="side__link"><font-awesome-icon icon="fa-solid fa-calendar" /> Agenda</router-link> -->
         <router-link to="/sessao" class="side__link"><font-awesome-icon icon="fa-solid fa-calendar" /> Sessao</router-link>
-        <router-link to="/financeiro" class="side__link"><font-awesome-icon icon="fa-solid fa-money-bills" /> Financeiro</router-link>
-        <router-link to="/documentos" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Documentos</router-link>
+        <!-- <router-link to="/financeiro" class="side__link"><font-awesome-icon icon="fa-solid fa-money-bills" /> Financeiro</router-link>
+        <router-link to="/documentos" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Documentos</router-link> -->
         <router-link to="/usuarios" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Usuarios</router-link>
         <router-link to="/login" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Login</router-link>
   </div>
@@ -22,18 +22,18 @@
       <router-link to="/pacientes" class="rounter-hamb">
         <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-address-card" />Pacientes</li>
       </router-link>
-      <router-link to="/agenda" class="rounter-hamb">
-        <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-calendar" />Agenda</li>
-      </router-link>
+      <!-- <router-link to="/agenda" class="rounter-hamb">
+        <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-calendar" />Agenda</li> -->
+      <!-- </router-link> -->
       <router-link to="/sessao" class="rounter-hamb">
         <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-calendar" />Sessao</li>
       </router-link>
-      <router-link to="/financeiro" class="rounter-hamb">
+      <!-- <router-link to="/financeiro" class="rounter-hamb">
         <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-money-bills" />Financeiro</li>
       </router-link>
       <router-link to="/documentos" class="rounter-hamb">
         <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-notes-medical"/>Documentos</li>
-      </router-link>
+      </router-link> -->
       <router-link to="/usuarios" class="rounter-hamb">
         <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-notes-medical"/>Usuarios</li>
       </router-link>

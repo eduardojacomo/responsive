@@ -114,33 +114,6 @@ onMounted(async() => {
         background-color: var(--tema2-blue1-dark);
     }
 
-    .pesquisar__input{
-        background-color: transparent;
-        border: 1px solid var(--tema2-text-dark-1);
-        border-radius: 24px;
-        width: 100%;
-        font-size: 12px;
-        padding: 11px;
-        color: var(--tema2-text-dark-1);
-    }
-
-    .pesquisar__input:checked{
-        border: 1px solid var(--tema2-text-dark-1);
-    }
-
-    .pesquisar__input:hover{
-        border: 1px solid var(--tema2-text-dark-2);
-    }
-    .pesquisar__label{
-        color: var(--tema2-text-dark-2);
-    }
-
-    .nav__router-link{
-        color: var(--tema2-text-dark-1);
-        font-size: 16px;
-        text-decoration: none;
-    }
-
     .cabecalho__icones{
         display:flex;
         justify-content: flex-end;

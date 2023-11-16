@@ -1,5 +1,5 @@
 <script setup>
-    import api from '../services/api';
+    
     import { loginData } from '../services/loginData';
     import { useRouter } from 'vue-router';
     import { useAuth } from '../store/modules/auth';

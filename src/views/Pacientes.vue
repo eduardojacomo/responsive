@@ -14,7 +14,7 @@
             
               <form>
                 <input type="text" class="filtro" v-model="localizapaciente" placeholder="Localizar.." name="search">
-                <button type="submit"><font-awesome-icon icon="fa-solid fa-magnifying-glass"/></button>
+                <button><font-awesome-icon icon="fa-solid fa-magnifying-glass"/></button>
                 
               </form>
             </div>
@@ -164,14 +164,8 @@ import { useAuth } from '../store/modules/auth';
   align-items: center;
   justify-content:flex-end;
   gap: 1rem;
-  flex-wrap: wrap;
-  /* margin: 0 1rem 0 0; */
-  
+  flex-wrap: wrap;  
 }
-
-/* .btn__acoes router-link{
-
-} */
 
 .btn__acoes button {
   
