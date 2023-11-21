@@ -1,30 +1,29 @@
 <script setup>
 import { computed, ref, reactive} from 'vue'
-import {useMetasAdd} from '@/store/modules/metasStore'
+import {useAcoesAdd} from '@/store/modules/acoesStore'
 
 
 const props = defineProps({
-  resultmetas: {
+  resultacoes: {
     type: Array,
     required: true,
     default : () =>[],
   },
   modelValue: String
 })
-const usemetasadd = useMetasAdd();
+const useacoesadd = useAcoesAdd();
 const emit = defineEmits(['update:modelValue']);
-//const emitadd = defineEmits(['update:idmodelValue']);
+
 const keyword = ref('');
 const itemselected = reactive({});
-//const tempitens = [reactive({})]
 
 const searchResult = computed(() => {
   if (keyword.value == ''){
     return[]
   }
 
-  return props.resultmetas.value.filter((item)=> {
-    if (item.metaTerapia.toLowerCase().includes(keyword.value.toLowerCase()))
+  return props.resultacoes.value.filter((item)=> {
+    if (item.acaoTerapia.toLowerCase().includes(keyword.value.toLowerCase()))
     {
       
       return item
@@ -37,9 +36,9 @@ const isOpen = ref(false);
 const setSelected = item =>{
   isOpen.value=false
   
-  keyword.value = item.metaTerapia;
+  keyword.value = item.acaoTerapia;
   itemselected.value = item;
-  console.log(itemselected.value);
+//   console.log(itemselected.value);
   emit('update:modelValue', keyword.value)
 };
 
@@ -49,25 +48,16 @@ const handleInput = event =>{
   emit('update:modelValue', keyword.value)
 };
 
-function setMetas(){
-  // if (localStorage.getItem('MetaTerapia')){
-  //   const testeitem = itemselected.value
-
-  //   testeitem.push(JSON.parse(localStorage.getItem('MetaTerapia')));
-    
-  //   console.log(testeitem)
-  // }
+function setAcoes(){
+  console.log(itemselected.value.id);
   if (itemselected.value.id>0){
-    usemetasadd.setMetasAdd({
+    useacoesadd.setAcoesAdd({
       id: itemselected.value.id,
-      metaTerapia: itemselected.value.metaTerapia
+      acaoTerapia: itemselected.value.acaoTerapia
     })
   }
-  console.log(itemselected.value.id);
-  modelValue='';
-  //localStorage.setItem('MetaTerapia',  JSON.stringify(itemselected.value))
+//   console.log(itemselected.value.id);
   
-
 }
 </script>
 
@@ -77,18 +67,18 @@ function setMetas(){
             <input 
             type="text" 
             class="filtro" 
-            placeholder="Metas da Terapia.." 
-            name="metas_add" 
+            placeholder="Ações da Terapia.." 
+            name="acoes_add" 
             autocomplete="off"
             :value="modelValue"
             @input="handleInput"
             >
-            <button type="submit" @click="setMetas"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+            <button type="submit" @click="setAcoes"><font-awesome-icon icon="fa-solid fa-plus" /></button>
         </div>
-        <div class="result_metas">
+        <div class="result_acoes">
           <ul v-show="isOpen" class="listresult">
-            <li v-for="result in searchResult" :key="result.metaTerapia" @click="setSelected(result)" class="metas_itens">
-              {{ result.metaTerapia }}
+            <li v-for="result in searchResult" :key="result.acaoTerapia" @click="setSelected(result)" class="acoes_itens">
+              {{ result.acaoTerapia }}
             </li>
           </ul>
           
@@ -140,7 +130,7 @@ function setMetas(){
     background: var(--color-detail1-blue);
   }
 
-  .result_metas{
+  .result_acoes{
     display: flex;
     position: relative;
   }
@@ -161,7 +151,7 @@ function setMetas(){
     border-radius: 5px; 
   }
 
-  .metas_itens{
+  .acoes_itens{
     cursor: pointer;
     border-bottom: solid 1px var(--color-border2);
     list-style-type: none;
@@ -169,7 +159,7 @@ function setMetas(){
     margin: 0 0 0 -40px;
   }
 
-  .metas_itens:hover{
+  .acoes_itens:hover{
     background-color: var(--color-detail2-blue);
     
   }

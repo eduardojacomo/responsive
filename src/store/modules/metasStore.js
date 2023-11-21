@@ -8,11 +8,15 @@ export const useMetas = defineStore("metas", {
     //const autenticated = ref(false);
     state: () => ({
         
-            metas: []
+            metas: [],
   
     }),
-    getmetas:{
-        meta: (state) => state.metas
+    //getmetas:{meta: (state) => state.metas}
+    getters:{
+        meta() {
+            return this.metas.value
+        }
+         
     },
     actions:{
         async getMetas() {
@@ -27,36 +31,27 @@ export const useMetas = defineStore("metas", {
             
         },
         
-        // async loginAuth(){
-        //     await api.post('/usuario/login', loginData.value, {withCredentials:true})
-   
-        //     .then((response) => {  
-        //     if (response.status === 200) {
-        //         // const token = response.data;
-        //         // localStorage.setItem('token', token);
-        //         //auth.user=true;
-        //         this.authUser=true;
-        //         this.router.push('/');
-        //     }
-        //     })
-        //     .catch((error) => {
-        //         console.error(error);
-        //         this.authUser=false;
-        //     });
-        // },
-        // async logoutAuth(){
-        //     await api.post('/usuario/logout', '', {withCredentials:true})
-        //     .then((response) => {
-        //         if (response.status === 200) {
-        //             this.authUser=false;
-        //             this.router.push('/login');
-        //         }
-        //         })
-        //     .catch((error) => {
-        //         console.error(error);
-        //         this.authUser=true;
-        //     });
-
-        // }
     }
 } )
+
+export const useMetasAdd = defineStore("metasAdd", {
+    state: () => ({
+        metaadicionada: [],
+
+}),
+    getters:{
+        metasadd(){
+            return this.metaadicionada.value
+        }
+    }, 
+    actions:{
+        setMetasAdd(metasadd){
+            this.metaadicionada.push(metasadd)
+        },
+
+        getMetasAdd(){
+            this.metaadicionada = this.metaadicionada
+        }
+    }
+
+})

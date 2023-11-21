@@ -1,44 +1,63 @@
 import {defineStore} from 'pinia';
-import axios from 'axios'
-import { pacienteData } from '@/services/pacienteData';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-export const useProtocolo = defineStore("protocoloStore", {
+export const useProtocolo = defineStore("protocolos", {
     //const autenticated = ref(false);
-    state: () => {
-        return{
-            protocolo: {
-                metas:'',
-                planos:'',
-                concluido: false
-
-            }
-
+    state: () => ({
+        
+            ProtocoloTratamento: [],
+            ProtocoloTratamentoItens: [],
+            ProtocoloTratamentoPaciente: [],
+  
+    }),
+    getters: {
+        protocolo() {
+            return this.ProtocoloTratamento.value
+        },
+        protocoloitems(){
+            return this.ProtocoloTratamentoItens.value
+        },
+        protocolopaciente(){
+            return this.ProtocoloTratamentoPaciente.value
         }
     },
-    getters:{
-        consultaProtocolo: (state) => state.protocoloStore
-    },
+
     actions:{
         async getProtocolo() {
-            
-            
-            
-            
-        },
-        
-        async addProtocolo(){
-            if (meta.content.value.trim()==='' || planos.content.value.trim()===''){
-                return
+            try{
+                
+                const response = await api.get("/ProtocoloTratamento/BuscarProtocolo")
+                this.protocolo.value = await response.data
+
+            } catch{
+                this.protocolo=[]
             }
-            this.protocolo.value.push({
-                metas : meta.content.value,
-                planos : planos.content.value,
-                concluido: false,
-            })
-            localStorage.setItem('protocolo', JSON.stringify(protocolo));
+            
         },
-        
+
+        async getProtocoloItens() {
+            try{
+                
+                const response = await api.get("/ProtocoloTratamento/BuscarProtocoloItems")
+                this.protocoloitems.value = await response.data
+
+            } catch{
+                this.protocoloitems=[]
+            }
+            
+        },
+
+        async getProtocoloPaciente() {
+            try{
+                
+                const response = await api.get("/ProtocoloTratamento/BuscarProtocoloItems")
+                this.protocolopaciente.value = await response.data
+
+            } catch{
+                this.protocolopaciente=[]
+            }
+            
+        },
     }
 } )
