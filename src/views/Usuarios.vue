@@ -1,16 +1,18 @@
 <template>
     <div class="main">
-        Usuarios
+        <!-- Usuarios
         <input type="text" v-model="usuario" placeholder="usuario">{{ usuario }}
         <input type="password" v-model="senha" placeholder="senha">{{ senha }}
         <input type="email" v-model="email" placeholder="email">{{ email }}
 
-        <button @click="postUser">Cadastrar</button>
+        <button @click="postUser">Cadastrar</button> -->
+        <ProtocoloTranstorno/>
     </div>
 </template>
 
 <script setup>
 import {computed, ref} from 'vue';
+import ProtocoloTranstorno from './ProtocoloTranstorno.vue';
 import api from '../services/api';
 const usuario = ref('');
 const senha = ref('');

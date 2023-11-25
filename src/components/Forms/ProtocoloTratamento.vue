@@ -1,69 +1,115 @@
 <script setup>
-import { reactive, ref, onBeforeMount } from 'vue';
-import {useProtocolo} from '@/store/modules/protocoloStore';
+import { reactive, ref, onBeforeMount, computed, watch } from 'vue';
 import AutoComplete from './AutoComplete.vue';
-import AutoCompleteAcoes from './AutoCompleteAcoes.vue';
 import {useMetas, useMetasAdd} from '@/store/modules/metasStore'
-import {useAcoes, useAcoesAdd} from '@/store/modules/acoesStore'
+import { useAcoesAdd, useAcoes} from '@/store/modules/acoesStore'
+import api from '../../services/api';
 
 const usemetas = useMetas();
-const usemetasadd = useMetasAdd();
 const useacoes = useAcoes();
+const usemetasadd = useMetasAdd();
 const useacoesadd = useAcoesAdd();
 const testemetas = reactive ({});
-const testeacoes = reactive ({});
-// const searchmetas = ref('');
-// const useprotocolo= useProtocolo();
- const planos = reactive({
-     metas:'',
-     acoes:'',
-     concluido:'',
-     status: ''
- });
 const metaselected = ref('');
 const metasadd = ref('');
-const acaoselected = ref('');
-const acoesadd = ref('');
+const metanome = ref('');
 
+const teste = ref('');
+const acoes = ref ([]);
+const focus = ref(null);
+const componentKey = ref(0);
 
+const forceRerender = () => {
+  componentKey.value += 1;
+};
 
-function selectedMetas(id){
-    console.log(id);
+ function addacao(id, acao){
+
+    if (!metasadd.value){
+        alert("Não foi informada a meta")
+    }
+    else{
+        useacoesadd.setAcoesAdd({
+         id: id,
+         acaoTerapia: acao,
+         idMeta: metasadd.value,
+         metaTerapia: metanome.value,
+        })
+        focusInput();
+    }
+
+ }
+
+const fetchAcoes = async () => {
+        const response = await api.get('/AcaoTerapia/BuscarAcaoTerapia');
+        acoes.value = await response.data;
+    };   
+    fetchAcoes();
+
+const filteredAcoes = computed(()  => {
+        return acoes.value.filter((acao) => acao.acaoTerapia.toLowerCase().includes(teste.value.toLowerCase()));
+
+      });
+
+function focusInput() {
+  
+    focus.value.focus();
+  
+};
+
+function selectedMetas(id, metaTerapia){
     metasadd.value=id;
-}
-
-function selectedAcoes(id){
-    console.log(id);
-    acoesaddadd.value=id;
-    planos.metas.value = metasadd.value;
-    planos.acoes.value = acoesadd.value;
-    planos.concluido = '0';
-    planos.status = 'A';
+    metanome.value=metaTerapia;
+    console.log(metasadd.value);
+    console.log(metanome.value);
+    // metabyId(id);
 }
 
  async function loadMetas(){
   await usemetas.getMetas();
 }
 
-// const loadMetasAdd= async() => {
-//   await usemetas.metaadicionada;
-// }
-// loadMetasAdd();
-async function loadAcoes(){
-  await useacoes.getAcoes();
-}
+const data = ref(useacoesadd.acaoadicionada);
+const groupedData = ref([])
+function groupDataByCategory() {
+                    groupedData.value = data.value.reduce((acc, cur) => {
+                        const category = cur.metaTerapia;
+                        if (!acc[category]) {
+                            acc[category] = [];
+                        }
+                        acc[category].push(cur);
+                        return acc;
+                    }, {});
+                    console.log("data by group")
+                    console.log(groupedData)
+                }
 
 const fetchItems = async () => {
     testemetas.value = await usemetas.metas;
-    testeacoes.value = await useacoes.acoes;
+    // testeacoes.value = await useacoes.acoes;
     };   
     fetchItems();
 
+function setAcoes(){
+    const verifyacoes = acoes.value.filter((acao) => acao.acaoTerapia.toLowerCase().includes(teste.value.toLowerCase()));
+    if(teste.value && verifyacoes.length===0){
+        useacoes.setAcoes({
+            acaoTerapia:teste.value,
+            status:"A"
+        })
+    }
+    fetchAcoes();    
+}
+
+watch(data.value, (newValue, oldValue) => {
+  console.log(newValue, oldValue);
+  groupDataByCategory();
+});
+
 onBeforeMount(async() => {
-        // getUserLogin();
-        await loadMetas();
-        await loadAcoes();
+        await loadMetas();  
     });
+
 </script>
 
 <template>
@@ -72,47 +118,86 @@ onBeforeMount(async() => {
         <div class="mountplan">
             <div class="formulario">
                 <h2>Plano de tratamento</h2>
-                <label>
+                <!-- <label>
                     <input name="planosProtocolo" class="input" id="planosProtolo" type="text" placeholder="" required >
-                    <span>Protocolo</span>
-                </label>
+                    <span>Plano Tratamento</span>
+                </label> -->
             </div>
         
             <div class="metas_add">
-                <AutoComplete :resultmetas = "testemetas.value" v-model="metaselected"/>
+                <AutoComplete :resultmetas = "testemetas.value" v-model="metaselected" :key="componentKey" />
+
+                <div class="metasadd_container">
+                    <div  v-for="m in usemetasadd.metaadicionada" :key="m.id" class="box">
+                        <label @click="selectedMetas(m.id, m.metaTerapia)">
+                            {{ m.metaTerapia }}
+                        </label>
+                        <input type="radio" class="checkmetas" name="metasadd" :value="m.id" v-model="m.id" checked=""
+                        > 
+                    </div>
+                </div>
             </div>
 
-            <div class="metas_add">
-                <AutoCompleteAcoes :resultacoes = "testeacoes.value" v-model="acaoselected"/>
+            <div class="acoes__add">
+                <div class="form_acoes">
+                <div>
+                    <h2>Inserir ações</h2>
+                </div>
+                <div class="formulario">
+                    <label>
+                        <input name="planosProtocolo" class="input" id="planosProtolo" type="text" v-model="teste" 
+                        ref="focus" placeholder="" required
+                        @focus="$event.target.select()" >
+                        <span>Ações</span>
+                    </label>
+                    <button type="submit" @click="setAcoes"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+                </div>
+                
+            </div>
+
+            <div>
+                <table id="acoes" class="table_acoes">
+                    <tr class="titulo_tabela">
+                    <th>Acao</th>
+                    <th> </th>
+                    </tr>
+                    <tr v-for="a in filteredAcoes" :key="a.id">
+                    <td>{{a.acaoTerapia}}</td>
+                    <td>
+                        <button @click="addacao(a.id, a.acaoTerapia)" class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+                    </td>
+                    </tr>
+                </table>
+            </div>
+
             </div>
             
         </div>
 
         <div class="showplan">
-            <h3>Protocolo de Tratamento </h3>
-            <div class="metasadd_container">
-                <div  v-for="m in usemetasadd.metaadicionada"  :key="m.id" class="box">
-                    <label @click="selectedMetas(m.id)">
-                        {{ m.metaTerapia }}
-                    </label>
-                    <input type="radio" class="checkmetas" name="metasadd" :value="m.id" v-model="m.id" checked=""> 
+            <div class="wordstyle">
+                <h3>Protocolo de Tratamento </h3>
+                <div>
+    
+                     <h4 v-if="metasadd">{{ metanome }}</h4>
+                     <!-- {{ metabyId(metasadd) }} -->
+                     <ul>
+                        <li v-for="(group, metaTerapia) in groupedData" :key="metaTerapia">
+                            <h3 v-if="metaTerapia">{{ metaTerapia }}</h3> 
+                            <!-- {{ metabyId(idMeta) }} -->
+                            <ul>
+                                <li v-for="item in group" :key="item.id">
+                                    <input type="checkbox" class="checkacoes" :value="item.id" checked>
+                                    <label>{{ item.acaoTerapia }}</label>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+    
                 </div>
-            </div>
-            <div v-show="metasadd >0">
-
-                 <h4>{{ metasadd }}</h4>
-                 
 
             </div>
-            <div>
-                <ul>
-                    <li v-for="a in useacoesadd.acaoadicionada" :key="a.id">
-                        <input type="checkbox" class="checkacoes" :value="a.id" checked>
-                        <label>{{ a.acaoTerapia }} </label>
-                    </li>
-                 </ul>
-            </div>
-            
+
         </div>
         
     
@@ -131,15 +216,49 @@ onBeforeMount(async() => {
         flex-direction: column;
         gap:1rem;
     }   
-    .formulario{
+
+    .showplan{
+        width: 100%;
+        height: 550px;
+    }
+
+    .form_acoes{
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
     }
+    .formulario{
+        display: flex;
+        flex-direction: row;
+    }
+
+    .formulario label .input {
+        width: 20vw;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    .formulario button {
+        float: left;
+        width: 20%;
+        padding: 10px;
+        background: var(--color-detail2-blue);
+        color: var(color-text);
+        font-size: 17px;
+        border: 1px solid var(--color-border2);
+        border-left: none; /* Prevent double borders */
+        border-top-right-radius: 8px;
+        border-bottom-right-radius: 8px;
+        cursor: pointer;
+    }
+
+  .formulario button:hover {
+    background: var(--color-detail1-blue);
+  }
 
     .metas_add{
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+        gap: 1rem;
     }
 
     .metasadd_container{
@@ -180,6 +299,18 @@ onBeforeMount(async() => {
 		color: var(--color-text1);
 		border-color: var(--tema-border);
 	}
+
+    .wordstyle{
+        display: flex;
+        flex-direction: column;
+        background-color: var(--color-background-mute);
+        border: solid 1px var(--color-border);
+        box-shadow: 0px 0px 5px 0px var(--tema2-divider-dark-2);
+        width: 100%;
+        height: 100%;
+        margin: 1rem 0;
+        padding: 1rem;
+    }
     /* .checkmetas{
         display: none;      
          

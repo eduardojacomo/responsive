@@ -1,27 +1,10 @@
 <script setup>
-import {onMounted, ref} from 'vue'
-import { RouterLink, RouterView } from 'vue-router'
+
 import Headers from './components/Menus/Headers.vue';
 import SideBars from './components/Menus/SideBars.vue';
 import { useAuth } from './store/modules/auth';
 
 const auth = useAuth();
-
-
-// export default{
-//   components:{
-//     Headers,
-//     SideBars,
-//     RouterLink, RouterView
-//   },
-//   data(){
-//     return{
-//         modeoEscuroAtivo: false,
-//         autenticado: false,
-//     }
-//   },
-  
-
 </script>
 
 <template>
@@ -80,59 +63,4 @@ const auth = useAuth();
   position: relative;
 }
 
-
-h2, h3, h4, h5{
-  color: var(--color-text);
-}
-
-.formulario label {
-  position: relative;
-  }
-
-  .formulario label .input {
-
-    font-size:16px;
-    border:1px solid var(--tema-border);
-    border-radius: 8px;
-    padding:15px 5px 5px 10px;
-    background: var(--color-background);
-    color: var(--color-text);
-    width: 25vw;
-    height: 40px;
-    display: flex;
-    flex-flow: 1 0 250px;
-  outline: 0;
-}
-
-.formulario label .input + span {
-  color: var(--color-text);
-  position: absolute;
-  left: 15px;
-  top: 0px;
-  font-size: 0.9em;
-  cursor: text;
-  transition: 0.3s ease;
-}
-
-.formulario label .input:placeholder-shown + span {
-  top: 12.5px;
-  font-size: 1em;
-}
-
-.formulario label .input:focus + span,
-.formulario label .input:valid + span {
-  color: var(--color-label-blue);
-  top: 0px;
-  font-size: 0.7em;
-  font-weight: 600;
-}
-
-@media screen and (max-width: 450px){
-  .header__app{
-    display: block;
-    width: 100vw;
-    position: fixed;
-    z-index: 1;
-  }
-}
 </style>

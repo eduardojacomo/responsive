@@ -29,16 +29,22 @@ export const useAcoes = defineStore("acoes", {
             
         },
         
-        async postAcoes(){
-            await api.post("/AcaoTerapia", acoes.value )
-            .then((response) => {  
-                if (response.status === 200) {
-                    console.log(response)
-                }
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+        async setAcoes(acoes){
+            // await api.post("/AcaoTerapia", acoes.value )
+            // .then((response) => {  
+            //     if (response.status === 200) {
+            //         console.log(response)
+            //     }
+            //     })
+            //     .catch((error) => {
+            //         console.error(error);
+            //     });
+            try{
+                const response = await api.post('/AcaoTerapia', acoes);
+                console.log(response);
+            } catch{
+                console.log('Não foi possivel cadastrar a meta');
+            }
         }
             
     }

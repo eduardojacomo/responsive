@@ -1,6 +1,6 @@
 <script setup>
-import { computed, ref, reactive} from 'vue'
-import {useMetasAdd} from '@/store/modules/metasStore'
+import { computed, ref, reactive, onMounted} from 'vue'
+import {useMetasAdd, useMetas} from '@/store/modules/metasStore'
 
 
 const props = defineProps({
@@ -13,10 +13,10 @@ const props = defineProps({
 })
 const usemetasadd = useMetasAdd();
 const emit = defineEmits(['update:modelValue']);
-//const emitadd = defineEmits(['update:idmodelValue']);
 const keyword = ref('');
 const itemselected = reactive({});
-//const tempitens = [reactive({})]
+const focus = ref(null);
+const usemetas = useMetas();
 
 const searchResult = computed(() => {
   if (keyword.value == ''){
@@ -36,7 +36,6 @@ const isOpen = ref(false);
 
 const setSelected = item =>{
   isOpen.value=false
-  
   keyword.value = item.metaTerapia;
   itemselected.value = item;
   console.log(itemselected.value);
@@ -49,26 +48,45 @@ const handleInput = event =>{
   emit('update:modelValue', keyword.value)
 };
 
-function setMetas(){
-  // if (localStorage.getItem('MetaTerapia')){
-  //   const testeitem = itemselected.value
+function focusInput() {
+  
+  focus.value.focus();
 
-  //   testeitem.push(JSON.parse(localStorage.getItem('MetaTerapia')));
-    
-  //   console.log(testeitem)
-  // }
+};
+
+function limpaItemSelected(){
+  itemselected.value.id='0';
+  itemselected.value.metaTerapia='Meta';
+  itemselected.value.status='I';
+  keyword.value = ''
+}
+
+function setMetas(){
+
+  if (typeof itemselected === "undefined") {
+    alert("myObj is undefined");
+ }
+
   if (itemselected.value.id>0){
     usemetasadd.setMetasAdd({
       id: itemselected.value.id,
       metaTerapia: itemselected.value.metaTerapia
     })
+  focusInput();
+  limpaItemSelected();
   }
-  console.log(itemselected.value.id);
-  modelValue='';
-  //localStorage.setItem('MetaTerapia',  JSON.stringify(itemselected.value))
-  
-
+  else {
+    if (keyword.value){
+      usemetas.setMetas({
+         metaTerapia: keyword.value,
+         status: 'A',
+        })
+      
+    }
+    alert ('Não foi possivel encontrar a meta')
+  } 
 }
+
 </script>
 
 <template>
@@ -78,10 +96,13 @@ function setMetas(){
             type="text" 
             class="filtro" 
             placeholder="Metas da Terapia.." 
-            name="metas_add" 
+            id="metas_add" 
             autocomplete="off"
             :value="modelValue"
             @input="handleInput"
+            ref="focus"
+            @focus="$event.target.select()"
+            onfocus="this.value=''"
             >
             <button type="submit" @click="setMetas"><font-awesome-icon icon="fa-solid fa-plus" /></button>
         </div>

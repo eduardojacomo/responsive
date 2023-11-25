@@ -9,13 +9,17 @@ export const useMetas = defineStore("metas", {
     state: () => ({
         
             metas: [],
+            metabyid:[]
   
     }),
     //getmetas:{meta: (state) => state.metas}
     getters:{
         meta() {
             return this.metas.value
-        }
+        },
+        getMetaById: (state) => (metaId) => {
+            return state.metas.find((metas) => metas.id === metaId);
+          },
          
     },
     actions:{
@@ -28,8 +32,15 @@ export const useMetas = defineStore("metas", {
             } catch{
                 this.metas=[]
             }
-            
         },
+        async setMetas(metas){
+            try{
+                const response = await api.post('/MetaTerapia', metas);
+                console.log(response);
+            } catch{
+                console.log('Não foi possivel cadastrar a meta');
+            }
+        }
         
     }
 } )
