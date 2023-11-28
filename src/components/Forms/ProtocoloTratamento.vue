@@ -3,7 +3,10 @@ import { reactive, ref, onBeforeMount, computed, watch } from 'vue';
 import AutoComplete from './AutoComplete.vue';
 import {useMetas, useMetasAdd} from '@/store/modules/metasStore'
 import { useAcoesAdd, useAcoes} from '@/store/modules/acoesStore'
-import api from '../../services/api';
+import {storeToRefs} from 'pinia';
+
+
+// const storage = useStorage("acao-terapia". refacao);
 
 const usemetas = useMetas();
 const useacoes = useAcoes();
@@ -15,64 +18,55 @@ const metasadd = ref('');
 const metanome = ref('');
 
 const teste = ref('');
-const acoes = ref ([]);
+
+const {refacao} = storeToRefs(useacoes);
+const {acaoadicionada} = storeToRefs(useacoesadd);
+const {setAcoes, getAcoes} = useacoes;
+const {getAcoesAdd, setAcoesAdd} =useacoesadd;
 const focus = ref(null);
-const componentKey = ref(0);
+const data = ref([acaoadicionada]);
+const groupedData = ref([])
 
-const forceRerender = () => {
-  componentKey.value += 1;
-};
-
- function addacao(id, acao){
+function addacao(id, acao){
 
     if (!metasadd.value){
         alert("Não foi informada a meta")
     }
     else{
-        useacoesadd.setAcoesAdd({
+        setAcoesAdd({
          id: id,
          acaoTerapia: acao,
          idMeta: metasadd.value,
          metaTerapia: metanome.value,
         })
         focusInput();
+        
     }
-
+    
  }
 
-const fetchAcoes = async () => {
-        const response = await api.get('/AcaoTerapia/BuscarAcaoTerapia');
-        acoes.value = await response.data;
-    };   
-    fetchAcoes();
+ const filteredAcoes = computed(()  => {
+        if (!refacao) {
+            return [];
+        }
+         return refacao.value.filter((a) => a.acaoTerapia.toLowerCase().includes(teste.value.toLowerCase()));
+     });
 
-const filteredAcoes = computed(()  => {
-        return acoes.value.filter((acao) => acao.acaoTerapia.toLowerCase().includes(teste.value.toLowerCase()));
-
-      });
-
-function focusInput() {
-  
+function focusInput() {  
     focus.value.focus();
-  
 };
 
 function selectedMetas(id, metaTerapia){
     metasadd.value=id;
     metanome.value=metaTerapia;
-    console.log(metasadd.value);
-    console.log(metanome.value);
-    // metabyId(id);
 }
 
  async function loadMetas(){
   await usemetas.getMetas();
-}
+ }
 
-const data = ref(useacoesadd.acaoadicionada);
-const groupedData = ref([])
 function groupDataByCategory() {
-                    groupedData.value = data.value.reduce((acc, cur) => {
+                    groupedData.value = acaoadicionada.value.reduce((acc, cur) => {
                         const category = cur.metaTerapia;
                         if (!acc[category]) {
                             acc[category] = [];
@@ -80,34 +74,43 @@ function groupDataByCategory() {
                         acc[category].push(cur);
                         return acc;
                     }, {});
-                    console.log("data by group")
-                    console.log(groupedData)
                 }
 
 const fetchItems = async () => {
     testemetas.value = await usemetas.metas;
-    // testeacoes.value = await useacoes.acoes;
     };   
     fetchItems();
 
-function setAcoes(){
-    const verifyacoes = acoes.value.filter((acao) => acao.acaoTerapia.toLowerCase().includes(teste.value.toLowerCase()));
+async function addAcoes(){
+    if (!refacao) {
+            return [];
+        }
+    const verifyacoes = refacao.value.filter((a) => a.acaoTerapia.toLowerCase().includes(teste.value.toLowerCase()));
     if(teste.value && verifyacoes.length===0){
-        useacoes.setAcoes({
+        await setAcoes({
             acaoTerapia:teste.value,
             status:"A"
         })
     }
-    fetchAcoes();    
+    await getAcoes();
 }
 
-watch(data.value, (newValue, oldValue) => {
-  console.log(newValue, oldValue);
-  groupDataByCategory();
+ watch(data.value, (newValue, oldValue) => {
+     console.log(newValue);
+    
+   groupDataByCategory();
 });
 
+async function addProtocolo(){
+    console.log(data.value);
+    const storage = localStorage.setItem("protocolo", JSON.stringify(data.value));
+}
+
 onBeforeMount(async() => {
-        await loadMetas();  
+        await loadMetas();
+        await getAcoes();
+        await getAcoesAdd();
+        await groupDataByCategory();
     });
 
 </script>
@@ -125,7 +128,7 @@ onBeforeMount(async() => {
             </div>
         
             <div class="metas_add">
-                <AutoComplete :resultmetas = "testemetas.value" v-model="metaselected" :key="componentKey" />
+                <AutoComplete :resultmetas = "testemetas.value" v-model="metaselected"/>
 
                 <div class="metasadd_container">
                     <div  v-for="m in usemetasadd.metaadicionada" :key="m.id" class="box">
@@ -150,12 +153,12 @@ onBeforeMount(async() => {
                         @focus="$event.target.select()" >
                         <span>Ações</span>
                     </label>
-                    <button type="submit" @click="setAcoes"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+                    <button type="submit" @click="addAcoes"><font-awesome-icon icon="fa-solid fa-plus" /></button>
                 </div>
                 
             </div>
 
-            <div>
+            <div class="tabela_acoes">
                 <table id="acoes" class="table_acoes">
                     <tr class="titulo_tabela">
                     <th>Acao</th>
@@ -180,11 +183,9 @@ onBeforeMount(async() => {
                 <div>
     
                      <h4 v-if="metasadd">{{ metanome }}</h4>
-                     <!-- {{ metabyId(metasadd) }} -->
                      <ul>
                         <li v-for="(group, metaTerapia) in groupedData" :key="metaTerapia">
                             <h3 v-if="metaTerapia">{{ metaTerapia }}</h3> 
-                            <!-- {{ metabyId(idMeta) }} -->
                             <ul>
                                 <li v-for="item in group" :key="item.id">
                                     <input type="checkbox" class="checkacoes" :value="item.id" checked>
@@ -197,7 +198,9 @@ onBeforeMount(async() => {
                 </div>
 
             </div>
-
+            <div>
+                <button @click="addProtocolo">Cadastrar</button>
+            </div>
         </div>
         
     
@@ -210,16 +213,21 @@ onBeforeMount(async() => {
         flex-direction: row;
         gap: 1rem;
         width: 100%;
+        
     }
     .showplan, .mountplan {
         display: flex;
         flex-direction: column;
         gap:1rem;
+        
+    }
+    .mountplan{
+        width: 33%;
     }   
 
     .showplan{
-        width: 100%;
-        height: 550px;
+        width: 67%;
+        height: 600px;
     }
 
     .form_acoes{
@@ -264,6 +272,7 @@ onBeforeMount(async() => {
     .metasadd_container{
         display: flex;
         gap: .5rem;
+        flex-wrap: wrap;
     }
 
     .box{
@@ -299,7 +308,6 @@ onBeforeMount(async() => {
 		color: var(--color-text1);
 		border-color: var(--tema-border);
 	}
-
     .wordstyle{
         display: flex;
         flex-direction: column;

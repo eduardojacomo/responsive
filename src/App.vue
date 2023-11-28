@@ -19,10 +19,10 @@ const auth = useAuth();
       </div>
       <div class="container__main">
        
+        <RouterView />
   
       </div>
     </div>
-    <RouterView />
 
   </main>
 </template>
@@ -56,6 +56,7 @@ const auth = useAuth();
 }
 .container__main{
   display: flex;
+  padding: 60px 1rem 1rem 180px;
 }
 
 .app{

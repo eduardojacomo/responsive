@@ -3,11 +3,26 @@
         <router-link to="/" class="side__link"><font-awesome-icon icon="fa-solid fa-house" /> Home</router-link>
         <router-link to="/pacientes" class="side__link"><font-awesome-icon icon="fa-solid fa-address-card" /> Pacientes</router-link>
         <!-- <router-link to="/agenda" class="side__link"><font-awesome-icon icon="fa-solid fa-calendar" /> Agenda</router-link> -->
-        <router-link to="/sessao" class="side__link"><font-awesome-icon icon="fa-solid fa-calendar" /> Sessao</router-link>
+        <router-link to="/sessao" class="side__link" @click="showMenu('Sessao')"><font-awesome-icon icon="fa-solid fa-calendar" /> Sessao</router-link>
+        <Transition :duration="550" name="nested">
+          <div class="content" v-show="expandMenu.Sessao">
+            <router-link to="/protocolotratamento" class="side__sublink"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Plano de Tratamento</router-link>
+          </div>
+        
+        </Transition>
         <!-- <router-link to="/financeiro" class="side__link"><font-awesome-icon icon="fa-solid fa-money-bills" /> Financeiro</router-link>
         <router-link to="/documentos" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Documentos</router-link> -->
         <router-link to="/usuarios" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Usuarios</router-link>
-        <router-link to="/login" class="side__link"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Login</router-link>
+        
+        <button type="button" class="side__button" @click="showMenu('Configuracao')"> <font-awesome-icon icon="fa-solid fa-gear"/> Configuração</button>
+        <Transition :duration="550" name="nested">
+          <div class="content" v-show="expandMenu.Configuracao">
+            <router-link to="/login" class="side__sublink"><font-awesome-icon icon="fa-solid fa-notes-medical"/> Login</router-link>
+          </div>
+        
+        </Transition>
+        
+        
   </div>
 
   <div id="menuToggle" class="hamburguer-menu">
@@ -35,53 +50,33 @@
         <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-notes-medical"/>Documentos</li>
       </router-link> -->
       <router-link to="/usuarios" class="rounter-hamb">
-        <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-notes-medical"/>Usuarios</li>
+        <li class="side__link-hamb"><font-awesome-icon icon="fa-solid fa-gear"/>Usuarios</li>
       </router-link>
       
     </ul>
   </div>
 
-  <!-- <div class="menu__hamburguer">
-    
-    <input type="checkbox" />
-    
-    <div class="hamburger-lines">
-              <span class="line line1"></span>
-              <span class="line line2"></span>
-              <span class="line line3"></span>
-    </div>
-    
-    <ul class="dropdown-content">
-      <a href="#">
-        <li>Perfil</li>
-      </a>
-      <a href="#">
-        <li>Perfil</li>
-      </a>
-      <a href="#">
-        <li>Perfil</li>
-      </a>
-    </ul>
-  </div> -->
-
 </template>
 
-<script>
-// import {computed} from 'vue';
-// import {useStore} from 'vuex';
+<script setup>
+import {ref} from 'vue'
 
-export default {
-    name: "Sidebars",
-    // setup(){
-    //         const store = useStore();
-    //         const auth = computed(()=> store.state.authenticated)
-    
-    //         return {
-    //             auth
-    //         }
-    //       },
+const expandMenu = ref({
+  Configuracao: false,
+  Sessao: false,
+})
+//let exp = document.getElementsByClassName("content");
+function showMenu(option){
+    if (option == "Configuracao"){
+      expandMenu.value.Configuracao=!expandMenu.value.Configuracao;
+    }else{
+      expandMenu.value.Sessao=!expandMenu.value.Sessao;
 
+    }
+  
 }
+
+
 </script>
 
 <style scoped>
@@ -95,23 +90,60 @@ export default {
   overflow-x: hidden;
   padding-top: 16px;
 }
-.side__link {
+.side__link, .side__sublink {
   
-  padding: 6px 8px 6px 16px;
+  
   text-decoration: none;
   font-size: 16px;
   color: var(--color-text);
   display: block;
 }
 
-.side__link:hover {
+.side__link{
+  padding: 6px 8px 6px 16px;
+}
+
+.side__sublink{
+  padding: 6px 8px 6px 35px;
+}
+
+.side__link:hover, .side__button:hover {
   /* background-color: var(--color-detail2-blue); */
   border-left: 5px solid var(--color-detail2-blue);
   /* color: var(--color-detail2-blue); */
 }
+.side__sublink:hover{
+  background-color: var(--color-detail2-blue);
+}
+.side__sublink:active{
+  background-color: var(--color-detail2-green);
+}
 
-.side__link:focus{
+.side__link:focus, .side__button:focus{
   border-left: 5px solid var(--color-detail2-green);
+}
+
+ .side__button{
+  background-color: var(--color-background-sidebar);
+  color: var(--color-text);
+  cursor: pointer;
+  padding: 10px 8px 10px 16px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  display: block;
+  font-size: 16px;
+} 
+.content{
+  padding: 0;
+  display: block;
+  /* overflow: hidden; */
+   background-color: var(--color-background-mute);
+}
+
+.active {
+  border-left: 5px solid var(--color-detail2-blue);
 }
 
 #menuToggle {
@@ -193,6 +225,19 @@ export default {
    left: 40px;
  }
 
+ .nested-enter-active, .nested-leave-active {
+	transition: all 0.5s ease-out;
+}
+/* delay leave of parent element */
+.nested-leave-active {
+  transition-delay: 0.25s;
+}
+
+.nested-enter-from,
+.nested-leave-to {
+  transform: translateY(-30px);
+  opacity: 0;
+}
 
 @media screen and (max-width: 450px) {
   .sidebar {

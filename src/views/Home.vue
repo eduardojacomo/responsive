@@ -15,21 +15,6 @@ const usuarios = ref ([]);
 const auth = useAuth();
 const router = useRouter();
 
-// async function getUserLogin(){
-//     try{
-//       await api.get("/Usuario/BuscarUsuarios")
-//           .then((response)=> {
-//             usuarios.value = response.data;
-//             message.value = usuarios.usuario;
-//             auth
-//           }
-//       )} catch(e){
-        
-//         router.push('/login');
-//       }
-//       return message  
-// }
-
 async function islogin(){
   await auth.getAuth();
   // console.log(auth.user);
@@ -136,12 +121,12 @@ onBeforeMount(async() => {
         display: flex;
         width: auto;
         justify-content:space-between;
-        padding: 35px 1rem 1rem 155px ;
+        /* padding: 35px 1rem 1rem 155px ; */
         height:100%;
     }
 
     .titulo__container{
-    padding: 2px 3rem;
+    padding: 2px 0;
     font-size: 24px;
     display: flex;
     flex-direction: column;
@@ -166,7 +151,7 @@ onBeforeMount(async() => {
       display: flex;
       justify-content:space-between;
       flex-wrap: wrap;
-      padding: 1rem 0rem .5rem 3rem;
+      padding: 1rem 0rem .5rem 0;
       gap:.5rem;
     }
 
@@ -185,7 +170,7 @@ onBeforeMount(async() => {
     }
     .grafico__pac{
       display:flex;
-      padding: 2px 0rem 0 3rem;
+      padding: 2px 0rem 0 0;
       width: 100%;
       flex-wrap: wrap;
       flex-grow: 1;
@@ -232,7 +217,7 @@ onBeforeMount(async() => {
     .atendimentos__container{
       display: flex;
       flex-direction: row;
-      padding: 0.5rem 0rem 1rem 3rem;
+      padding: 0.5rem 0 1rem 0;
       align-content: space-between;
       justify-content: space-between;
       flex-wrap: wrap;

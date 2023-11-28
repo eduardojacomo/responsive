@@ -11,6 +11,6 @@
 
 <style scoped>
     .main{
-        padding: 50px 0 0 250px;
+        padding: 0 0 0 1rem;
     }
 </style>

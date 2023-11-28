@@ -259,13 +259,6 @@ async function updateData (){
           });
 
       }
-    // const cepInput = document.querySelector("input[name=cepPaciente]");
-    // const value = cepInput.value.replace(/[^0-9]+/, '');
-    
-    // if (value.length==8){
-    //     await cep.getCep();
-    //     console.log(cep.cep)
-    // }
  }
 
 onMounted(async() => {

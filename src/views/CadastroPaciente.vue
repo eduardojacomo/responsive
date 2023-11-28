@@ -2,8 +2,8 @@
 import Tab from '../components/Tabs/Tab.vue';
 import TabWrapper from '../components/Tabs/TabWrapper.vue';
 import GeraisPaciente from '../components/Forms/GeraisPaciente.vue';
-import ProtocoloTratamento from '../components/Forms/ProtocoloTratamento.vue'
-
+// import ProtocoloTratamento from '../components/Forms/ProtocoloTratamento.vue'
+import TempAcoes from '../components/Forms/TempAcoes.vue';
 name:"CadastroPaciente"
 const props = defineProps({
             id: Number,
@@ -31,10 +31,11 @@ const props = defineProps({
                 </tab>
     
                 <tab title="Financeiro">
-    
+                    <TempAcoes />
                 </tab>
                 <tab title="Terapia">
-                    <ProtocoloTratamento />
+                    <!-- <ProtocoloTratamento /> -->
+                    <h2>Dados Terapia</h2>
                 </tab>
                 <tab title="Documentos">
     
@@ -49,13 +50,14 @@ const props = defineProps({
 
 <style scoped>
 
-.main{
+/* .main{
     
     padding: 50px 1rem 0 200px;
-}
+} */
 
 .tab-cad{
     padding: 1rem 1rem 0.5rem 0;
+    width: 100%;
     
 }
 

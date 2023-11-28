@@ -131,13 +131,9 @@ import { useAuth } from '../store/modules/auth';
     width: 100%;
     flex-wrap: wrap;
     justify-content:space-between;
-    padding: 50px 1rem 1rem 205px  ;
+    padding: 0 0 0 1rem;
     align-items: center;
-    /* position: absolute;
-    align-content: center;
-    text-align: center; */
     height:100%;
-    /* background-color: white ; */
 }
 
 .rows__content{
@@ -168,8 +164,6 @@ import { useAuth } from '../store/modules/auth';
 }
 
 .btn__acoes button {
-  
-  
   padding: 10px;
   background: var(--color-detail2-green);
   color: var(color-text);
@@ -304,14 +298,9 @@ import { useAuth } from '../store/modules/auth';
   }
 
   .modal-content{
-    /* width: 80vw;
-    height: 80vh; */
     display: flex;
-    /* position: absolute; */
     padding: 2rem;
     overflow-y: auto;
-    /* justify-content: center;
-    align-items: center; */
     flex-direction: column;
     z-index: 8;
   }
@@ -334,8 +323,6 @@ import { useAuth } from '../store/modules/auth';
 }
 
 #pacientes tr:nth-child(even){background-color: var(--color-background-mute);}
-
-/* #pacientes tr:hover {background-color: var(--color-detail2-blue);} */
 
 #pacientes th {
   padding-top: 12px;

@@ -4,6 +4,7 @@ import Login from '../views/Login.vue'
 import Pacientes from '../views/Pacientes.vue'
 import ProfilePaciente from '../views/ProfilePaciente.vue'
 import Sessao from '../views/Sessao.vue'
+import ProtocoloTratamento from '../components/Forms/ProtocoloTratamento.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -16,6 +17,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/protocolotratamento',
+      name: 'protocolotratamento',
+      component: ProtocoloTratamento
     },
     {
       path: '/pacientes',
