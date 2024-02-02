@@ -1,68 +1,71 @@
 import {defineStore} from 'pinia';
+import {ref, computed} from 'vue'
 import api from '../../services/api'
-import { loginData } from '../../services/loginData';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-export const useMetas = defineStore("metas", {
-    //const autenticated = ref(false);
-    state: () => ({
-        
-            metas: [],
-            metabyid:[]
-  
-    }),
-    //getmetas:{meta: (state) => state.metas}
-    getters:{
-        meta() {
-            return this.metas.value
-        },
-        getMetaById: (state) => (metaId) => {
-            return state.metas.find((metas) => metas.id === metaId);
-          },
-         
-    },
-    actions:{
-        async getMetas() {
-            try{
-                
-                const response = await api.get("/MetaTerapia/BuscarMetaTerapia")
-                this.metas.value = await response.data
 
-            } catch{
-                this.metas=[]
-            }
-        },
-        async setMetas(metas){
-            try{
-                const response = await api.post('/MetaTerapia', metas);
-                console.log(response);
-            } catch{
-                console.log('Não foi possivel cadastrar a meta');
-            }
+export const useMetas = defineStore("metas", ()=>{
+    const metas = ref ([]);
+
+    const meta = computed(()=> metas.value);
+
+    async function getMetas() {
+        try{               
+            const response = await api.get("/MetaTerapia/BuscarMetaTerapia")
+            metas.value = await response.data
+        } catch{
+            metas.value=[]
         }
-        
-    }
-} )
-
-export const useMetasAdd = defineStore("metasAdd", {
-    state: () => ({
-        metaadicionada: [],
-
-}),
-    getters:{
-        metasadd(){
-            return this.metaadicionada.value
-        }
-    }, 
-    actions:{
-        setMetasAdd(metasadd){
-            this.metaadicionada.push(metasadd)
-        },
-
-        getMetasAdd(){
-            this.metaadicionada = this.metaadicionada
+        };
+    async function setMetas(metas){
+        try{
+            const response = await api.post('/MetaTerapia', metas);
+            console.log(response);
+        } catch{
+            console.log('Não foi possivel cadastrar a meta');
         }
     }
 
-})
+    return{
+        setMetas,
+        getMetas,
+        metas,
+        meta
+    }
+});
+
+export const useMetasAdd = defineStore("metasAdd", ()=> {
+    
+    const metaadicionada=ref([]);
+    const tempmetas = ref([]);
+
+    const metasadd = computed(()=> metaadicionada.value);
+        
+    function setMetasAdd(metasadd){
+            metaadicionada.value.push(metasadd)
+            localStorage.setItem("metaadicionadatemp", JSON.stringify(metaadicionada.value));
+    };
+
+    function getMetasAdd(){
+        const storageMetas = localStorage.getItem("metaadicionadatemp");
+        if (storageMetas){
+            metaadicionada.value = JSON.parse(storageMetas)
+            console.log(metaadicionada.value);
+        }
+    };
+
+    function defaultMetasAdd(){
+        metaadicionada.value.length=0;
+        console.log(metaadicionada.value);
+    }
+
+    return {
+        getMetasAdd,
+        setMetasAdd,
+        metasadd,
+        metaadicionada,
+        defaultMetasAdd
+    }
+
+});

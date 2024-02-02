@@ -1,48 +1,86 @@
 <script setup>
 import { reactive, ref, onBeforeMount, computed, watch } from 'vue';
 import AutoComplete from './AutoComplete.vue';
-import {useMetas, useMetasAdd} from '@/store/modules/metasStore'
-import { useAcoesAdd, useAcoes} from '@/store/modules/acoesStore'
+import {useMetas, useMetasAdd} from '@/store/modules/metasStore';
+import { useAcoesAdd, useAcoes} from '@/store/modules/acoesStore';
+import { useProtocolos } from '../../store/modules/protocoloStore';
 import {storeToRefs} from 'pinia';
+import Toast from '../Tools/Toast.vue';
+import Loader from '../Tools/Loader.vue';
 
-
-// const storage = useStorage("acao-terapia". refacao);
 
 const usemetas = useMetas();
 const useacoes = useAcoes();
 const usemetasadd = useMetasAdd();
 const useacoesadd = useAcoesAdd();
-const testemetas = reactive ({});
+
 const metaselected = ref('');
 const metasadd = ref('');
 const metanome = ref('');
-
+const useprotocolos = useProtocolos();
 const teste = ref('');
+const temp = ref([]);
+const message = ref('');
+const titulo = ref('');
+const state = ref(false);
 
 const {refacao} = storeToRefs(useacoes);
 const {acaoadicionada} = storeToRefs(useacoesadd);
 const {setAcoes, getAcoes} = useacoes;
-const {getAcoesAdd, setAcoesAdd} =useacoesadd;
+const {getAcoesAdd, setAcoesAdd, defaultAcoesAdd} =useacoesadd;
+
+const {meta} = storeToRefs(usemetas);
+const {metaadicionada} = storeToRefs(usemetas);
+const {setMetas, getMetas} = usemetas;
+const {getMetasAdd, defaultMetasAdd} = usemetasadd;
+
+
+const {setProtocolos, getProtocolos, getProtocolosbyMeta} = useprotocolos;
+const {protbymeta, loader, respServer} = storeToRefs(useprotocolos);
+
+
 const focus = ref(null);
 const data = ref([acaoadicionada]);
-const groupedData = ref([])
+const groupedData = ref([]);
+
+async function getProtbyMetas(idmeta) {
+      const tempProtocolo = protbymeta.value
+        .filter((protocolo) => protocolo.iD_Meta === idmeta)
+        .map((protocolo) => {
+          const tempmeta = meta.value.find((m) => m.id === protocolo.iD_Meta);
+          const acaotemp = refacao.value.find((a) => a.id === protocolo.iD_Acao);
+
+          return {
+            ...protocolo,
+            metaTerapia: tempmeta.metaTerapia,
+            acaoTerapia: acaotemp.acaoTerapia,
+          };
+        });
+        return tempProtocolo
+    }
+
 
 function addacao(id, acao){
-
     if (!metasadd.value){
         alert("Não foi informada a meta")
     }
     else{
-        setAcoesAdd({
-         id: id,
-         acaoTerapia: acao,
-         idMeta: metasadd.value,
-         metaTerapia: metanome.value,
-        })
-        focusInput();
+        const verifyacoes = acaoadicionada.value.filter((v)=> v.id === id && v.idMeta === metasadd.value)
+        if (verifyacoes.length===0){
+            setAcoesAdd({
+             id: id,
+             acaoTerapia: acao,
+             idMeta: metasadd.value,
+             metaTerapia: metanome.value,
+             status:'I'
+            })
+            focusInput();
+        }
+        else {
+            alert("Ação já foi adicionada para essa meta");
+        }
         
-    }
-    
+    } 
  }
 
  const filteredAcoes = computed(()  => {
@@ -56,14 +94,27 @@ function focusInput() {
     focus.value.focus();
 };
 
-function selectedMetas(id, metaTerapia){
+async function selectedMetas(id, metaTerapia){
     metasadd.value=id;
     metanome.value=metaTerapia;
+    if(acaoadicionada.value.length == 0 || !(acaoadicionada.value.some((a)=> a.idMeta === id))){
+        await getProtocolos();
+        await getProtocolosbyMeta(id);
+        temp.value = await getProtbyMetas(id);
+        if (temp.value){
+             temp.value.forEach(element => {
+                 setAcoesAdd({
+                  id: element.iD_Acao,
+                  acaoTerapia: element.acaoTerapia,
+                  idMeta: element.iD_Meta,
+                  metaTerapia: element.metaTerapia,
+                  status:'U'
+                 })
+             });
+         }
+    }
+    
 }
-
- async function loadMetas(){
-  await usemetas.getMetas();
- }
 
 function groupDataByCategory() {
                     groupedData.value = acaoadicionada.value.reduce((acc, cur) => {
@@ -75,11 +126,6 @@ function groupDataByCategory() {
                         return acc;
                     }, {});
                 }
-
-const fetchItems = async () => {
-    testemetas.value = await usemetas.metas;
-    };   
-    fetchItems();
 
 async function addAcoes(){
     if (!refacao) {
@@ -102,15 +148,67 @@ async function addAcoes(){
 });
 
 async function addProtocolo(){
-    console.log(data.value);
+    console.log(acaoadicionada.value);
     const storage = localStorage.setItem("protocolo", JSON.stringify(data.value));
+
+    const newprotocolo = acaoadicionada.value.filter(protocolo => protocolo.status === 'I').map((protocolo) => ({
+        iD_Meta: protocolo.idMeta,
+        iD_Acao: protocolo.id,
+        status: 'A',
+    }));
+    await setProtocolos(newprotocolo);
+    localStorage.removeItem("protocolo");
+    localStorage.removeItem("metaadicionadatemp");
+    localStorage.removeItem("protocolotemp");
+    responseServer();
 }
 
+async function responseServer(){
+    if (respServer.value === 200){
+        message.value = "Protocolo Adicionado com sucesso";
+        titulo.value= "Sucesso";
+        loader.value = false;
+        defaultMetasAdd();
+        defaultAcoesAdd();
+        showToast()
+    }
+    else
+    {
+        message.value = "Não foi possivel salvar os dados";
+        titulo.value= "Erro";
+        loader.value;
+        showToast();
+
+    }
+}
+
+function showToast(){
+    // if (respServer.value === 200){
+    //     message.value = "Protocolo Adicionado com sucesso";
+    //     titulo.value= "Sucesso";
+        
+    //     loader.value = false;
+    //     defaultMetasAdd();
+    //     defaultAcoesAdd();
+    // }
+    
+    state.value = !state.value;
+    
+    setTimeout(()=>{
+        state.value = !state.value;
+    }, 5000);
+
+    
+}
+
+
 onBeforeMount(async() => {
-        await loadMetas();
+        
         await getAcoes();
         await getAcoesAdd();
         await groupDataByCategory();
+        await getMetas();
+        await getMetasAdd();
     });
 
 </script>
@@ -128,7 +226,7 @@ onBeforeMount(async() => {
             </div>
         
             <div class="metas_add">
-                <AutoComplete :resultmetas = "testemetas.value" v-model="metaselected"/>
+                <AutoComplete v-model="metaselected"/>
 
                 <div class="metasadd_container">
                     <div  v-for="m in usemetasadd.metaadicionada" :key="m.id" class="box">
@@ -140,50 +238,49 @@ onBeforeMount(async() => {
                     </div>
                 </div>
             </div>
-
-            <div class="acoes__add">
-                <div class="form_acoes">
-                <div>
-                    <h2>Inserir ações</h2>
-                </div>
-                <div class="formulario">
-                    <label>
-                        <input name="planosProtocolo" class="input" id="planosProtolo" type="text" v-model="teste" 
-                        ref="focus" placeholder="" required
-                        @focus="$event.target.select()" >
-                        <span>Ações</span>
-                    </label>
-                    <button type="submit" @click="addAcoes"><font-awesome-icon icon="fa-solid fa-plus" /></button>
-                </div>
-                
-            </div>
-
-            <div class="tabela_acoes">
-                <table id="acoes" class="table_acoes">
-                    <tr class="titulo_tabela">
-                    <th>Acao</th>
-                    <th> </th>
-                    </tr>
-                    <tr v-for="a in filteredAcoes" :key="a.id">
-                    <td>{{a.acaoTerapia}}</td>
-                    <td>
-                        <button @click="addacao(a.id, a.acaoTerapia)" class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-plus" /></button>
-                    </td>
-                    </tr>
-                </table>
-            </div>
-
-            </div>
             
+                <div class="acoes__add">
+                    <div class="form_acoes">
+                        <div>
+                            <h2>Inserir ações</h2>
+                        </div>
+                        <div class="formulario">
+                            <label>
+                                <input name="planosProtocolo" class="input" id="planosProtolo" type="text" v-model="teste" 
+                                ref="focus" placeholder="" required
+                                @focus="$event.target.select()" >
+                                <span>Ações</span>
+                            </label>
+                            <button type="submit" @click="addAcoes"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+                        </div>
+                    
+                    </div>
+                
+                    <div class="tabela_acoes">
+                            <table id="acoes" class="table_acoes">
+                                <tr class="titulo_tabela">
+                                    <th>Acao</th>
+                                    <th> </th>
+                                </tr>
+                                <tr v-for="a in filteredAcoes" :key="a.id">
+                                    <td>{{a.acaoTerapia}}</td>
+                                    <td>
+                                        <button @click="addacao(a.id, a.acaoTerapia)" class="btn-table-pac"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+                                    </td>
+                                </tr>
+                            </table>
+                    </div>
+
+                </div>
         </div>
 
         <div class="showplan">
             <div class="wordstyle">
-                <h3>Protocolo de Tratamento </h3>
+                <h2>Plano de Tratamento </h2>
                 <div>
     
-                     <h4 v-if="metasadd">{{ metanome }}</h4>
-                     <ul>
+                        <!-- <h4 v-if="metasadd">{{ metanome }}</h4> -->
+                        <ul>
                         <li v-for="(group, metaTerapia) in groupedData" :key="metaTerapia">
                             <h3 v-if="metaTerapia">{{ metaTerapia }}</h3> 
                             <ul>
@@ -200,10 +297,22 @@ onBeforeMount(async() => {
             </div>
             <div>
                 <button @click="addProtocolo">Cadastrar</button>
+                <button @click="showToast">teste</button>
             </div>
         </div>
+           
         
+        
+        <transition :duration="550" name="nested">
+            <div v-show="state" class="inner">
+                <Toast :msg="message" :titulo="titulo" />
     
+            </div>
+
+        </transition>
+        <div class="loader">
+            <Loader v-if="loader"/>
+        </div>
     </div>
 </template>
 
@@ -263,6 +372,14 @@ onBeforeMount(async() => {
     background: var(--color-detail1-blue);
   }
 
+  .loader{
+    display: flex;
+    position:absolute;
+    top:50%;
+    left:50%;
+    z-index: 200;
+  }
+
     .metas_add{
         display: flex;
         flex-direction: column;
@@ -319,6 +436,42 @@ onBeforeMount(async() => {
         margin: 1rem 0;
         padding: 1rem;
     }
+
+    
+.nested-enter-active, .nested-leave-active {
+	transition: all 0.3s ease-in-out;
+}
+
+.nested-leave-active {
+  transition-delay: 0.25s;
+}
+
+.nested-enter-from,
+.nested-leave-to {
+  transform: translateY(30px);
+  opacity: 0;
+}
+
+.nested-enter-active .inner,
+.nested-leave-active.inner{
+    transition: all 0.3s ease-in-out;
+}
+
+.inner { 
+display: flex;
+position: absolute;
+right: 300px;     
+z-index: 50;
+}
+
+.nested-enter-active .inner {
+	transition-delay: 0.25s;
+}
+.nested-enter-from .inner,
+.nested-leave-to .inner {
+  transform: translateX(25px);
+  opacity: 0.001;
+}
     /* .checkmetas{
         display: none;      
          

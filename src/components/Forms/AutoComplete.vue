@@ -1,7 +1,8 @@
 <script setup>
 import { computed, ref, reactive, onMounted} from 'vue'
 import {useMetasAdd, useMetas} from '@/store/modules/metasStore'
-
+import {storeToRefs} from 'pinia';
+import { useProtocolos } from '../../store/modules/protocoloStore';
 
 const props = defineProps({
   resultmetas: {
@@ -18,19 +19,37 @@ const itemselected = reactive({});
 const focus = ref(null);
 const usemetas = useMetas();
 
+const {meta} = storeToRefs(usemetas);
+const {metaadicionada} = storeToRefs(usemetasadd);
+const {setMetas, getMetas} = usemetas;
+const {setMetasAdd} = usemetasadd;
+
+const useprotocolos = useProtocolos();
+const {protocolo, protMetas} = storeToRefs(useprotocolos);
+const {setProtocolos, getProtocolos, getProtocolosbyMeta} = useprotocolos;
+
 const searchResult = computed(() => {
-  if (keyword.value == ''){
+  // console.log(metaadicionada)
+  if (keyword.value == '' || !metaadicionada){
     return[]
   }
-
-  return props.resultmetas.value.filter((item)=> {
-    if (item.metaTerapia.toLowerCase().includes(keyword.value.toLowerCase()))
-    {
-      
-      return item
-    }
+  
+  const filteredMetas = meta.value.filter((item) => {
+    const isNotInMetaAdicionada = !metaadicionada.value.some((metaAdicionada) => metaAdicionada.id === item.id);
+    const hasMatchingKeyword = item.metaTerapia.toLowerCase().includes(keyword.value.toLowerCase());
+    return isNotInMetaAdicionada && hasMatchingKeyword;
   })
-});
+  console.log(filteredMetas);
+  return filteredMetas;
+  });
+
+    // if (meta.value.filter((item)=> {
+      // if (item.metaTerapia.toLowerCase().includes(keyword.value.toLowerCase()) )
+      // {
+      //   console.log('item result print')
+      //   console.log(item)
+      //   return item
+      // }
 
 const isOpen = ref(false);
 
@@ -42,7 +61,7 @@ const setSelected = item =>{
   emit('update:modelValue', keyword.value)
 };
 
-const handleInput = event =>{
+const handleeInput = event =>{
   isOpen.value = true
   keyword.value = event.target.value
   emit('update:modelValue', keyword.value)
@@ -61,23 +80,26 @@ function limpaItemSelected(){
   keyword.value = ''
 }
 
-function setMetas(){
+function addMetas(){
 
   if (typeof itemselected === "undefined") {
     alert("myObj is undefined");
  }
 
   if (itemselected.value.id>0){
-    usemetasadd.setMetasAdd({
+    setMetasAdd({
       id: itemselected.value.id,
       metaTerapia: itemselected.value.metaTerapia
+      
     })
-  focusInput();
-  limpaItemSelected();
+    getProtocolosbyMeta(itemselected.value.id);
+    console.log(protMetas.value);
+    focusInput();
+    // limpaItemSelected();
   }
   else {
     if (keyword.value){
-      usemetas.setMetas({
+      setMetas({
          metaTerapia: keyword.value,
          status: 'A',
         })
@@ -104,7 +126,7 @@ function setMetas(){
             @focus="$event.target.select()"
             onfocus="this.value=''"
             >
-            <button type="submit" @click="setMetas"><font-awesome-icon icon="fa-solid fa-plus" /></button>
+            <button type="submit" @click="addMetas"><font-awesome-icon icon="fa-solid fa-plus" /></button>
         </div>
         <div class="result_metas">
           <ul v-show="isOpen" class="listresult">

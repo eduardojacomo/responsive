@@ -154,6 +154,7 @@
            <div class="btnconfirmar">
                <button @click="salvarPaciente" class="btncad_pac">Confirmar</button>
            </div>
+           {{pacientebyid.nome}}
        </div>
    </div>
    </div>
@@ -164,17 +165,24 @@ import {onMounted, ref, reactive, nextTick} from 'vue';
 import api from '../../services/api';
 import {pacienteData} from '../../services/pacienteData'
 import axios from 'axios';
-import { useCep } from '../../store/modules/pacienteStore';
-import { vMaska } from "maska"
 
+import { vMaska } from "maska"
+import { usePacientes, useCep} from '@/store/modules/pacienteStore';
+import {storeToRefs} from 'pinia';
+
+const usepacientes = usePacientes();
+const {getPacientes, getPAcientebyId} = usepacientes;
+const {pacientes, pacientebyid, idpaciente} = storeToRefs(usepacientes);
+
+const pac = ref('');
 const cep = useCep();
 const props = defineProps({
             idpac: Number,
             required: true
         })
-const id = props.idpac;
-const cepGet = reactive([]);
 
+const cepGet = reactive([]);
+const id = props.idpac;
 // const setFocus = () => {
 //       nextTick(() => {
 //         numend_pac.value.focus();
@@ -211,27 +219,31 @@ async function updateData (){
   });
 }
 
-// watch( 
-//     ()=> pacienteData.cep, 
-//     () =>{
-//         if (pacienteData.cep.lenght ==8){
-//             console.log(pacienteData.cep);
-//         }
-//     })
-
- async function getPacientes() {
-    let pacientes = reactive ([]);
+ async function getPaciente() {
+    // const pacientes = reactive ([]);
     if (props.id != 0) {
-         await api.get("/paciente/"+id)
-        .then((response) => {
-            pacienteData.value = response.data;
-            console.log(props.idpac)
-            //pacientesData.value =pacientes.value.nome;
-        })
-        .catch((error) => {
-        console.error(error);
-      });
-        
+            idpaciente.value = id;
+            await getPAcientebyId(id)
+            console.log(pacientebyid);
+            
+            pacienteData.nome = pacientebyid.value.nome;
+            pacienteData.cpf = pacientebyid.value.cpf;
+            pacienteData.cep = pacientebyid.value.cep;
+            pacienteData.bairro = pacientebyid.value.bairro;
+            pacienteData.celular = pacientebyid.value.celular;
+            pacienteData.sexo = pacientebyid.value.sexo;
+            pacienteData.estadocivil = pacientebyid.value.estadoCivil;
+            pacienteData.endereco = pacientebyid.value.endereco;
+            pacienteData.numero = pacientebyid.value.numero;
+            pacienteData.complemento = pacientebyid.value.complemento;
+            pacienteData.contatoEmergencia = pacientebyid.value.contatoEmergencia;
+            pacienteData.nomeContato = pacientebyid.value.nomeContato;
+            pacienteData.email = pacientebyid.value.email;
+            pacienteData.cidade = pacientebyid.value.cidade;
+            pacienteData.uf = pacientebyid.value.uf;
+            pacienteData.profissao = pacientebyid.value.profissao;
+            pacienteData.codigo = pacientebyid.value.codigo;
+            console.log(pacienteData);        
     }    
 }
 
@@ -246,7 +258,6 @@ async function updateData (){
               cepGet.value=response.data;
             
               pacienteData.endereco = await cepGet.value.logradouro;
-              
               pacienteData.complemento = await cepGet.value.complemento;
               pacienteData.bairro = await cepGet.value.bairro;
               pacienteData.cidade = await cepGet.value.localidade;
@@ -262,6 +273,7 @@ async function updateData (){
  }
 
 onMounted(async() => {
+    getPaciente();
     getPacientes();
 }  
     );

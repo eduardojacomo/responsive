@@ -65,11 +65,17 @@ export const useAcoesAdd = defineStore("acoesAdd", ()=> {
 
     function getAcoesAdd(){
         const storageProtocolo = localStorage.getItem("protocolotemp");
+       
+        
         if (storageProtocolo){
             acaoadicionada.value = JSON.parse(storageProtocolo)
             console.log(acaoadicionada.value)
             
         }
+    };
+
+    function defaultAcoesAdd(){
+        acaoadicionada.value.length=0;
     }
 
         
@@ -78,6 +84,7 @@ export const useAcoesAdd = defineStore("acoesAdd", ()=> {
         acoesadd,
         setAcoesAdd,
         getAcoesAdd,
+        defaultAcoesAdd
     }
 
 });
