@@ -23,10 +23,10 @@ export const usePacientes = defineStore("pacientes", ()=>{
             pacientes.value=[]
         }
     };
-    async function setPacientes(protocolos){
+    async function setPacientes(paciente){
         loader.value = false;
         try{
-            const response = await api.post('/Protocolo', protocolos);
+            const response = await api.post('/Paciente', paciente);
             respServer.value = response.status;
             console.log(respServer.value);
             loader.value = true;
