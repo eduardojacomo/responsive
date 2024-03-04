@@ -27,13 +27,13 @@ import { faBars} from '@fortawesome/free-solid-svg-icons'
 import { faFilter} from '@fortawesome/free-solid-svg-icons'
 import { faUserPen} from '@fortawesome/free-solid-svg-icons'
 import { faIdBadge} from '@fortawesome/free-solid-svg-icons'
-import { faUserPlus} from '@fortawesome/free-solid-svg-icons'
+import { faUserPlus, faCaretDown, faCaretUp} from '@fortawesome/free-solid-svg-icons'
 import { faTable, faList, faCircleXmark, faPlus, faGear} from '@fortawesome/free-solid-svg-icons'
 import {faFileImage} from '@fortawesome/free-regular-svg-icons'
 
 library.add(faBell, faSliders, faHouse, faAddressCard, faCalendar, faMoneyBills, faMagnifyingGlass, 
     faNotesMedical, faCoins, faComments, faListCheck, faInbox, faCircleCheck, faClock, faBars, faFilter, 
-    faUserPen, faIdBadge, faUserPlus, faTable, faList, faCircleXmark, faFileImage, faPlus, faGear)
+    faUserPen, faIdBadge, faUserPlus, faTable, faList, faCircleXmark, faFileImage, faPlus, faGear, faCaretDown, faCaretUp)
 
 const pinia = createPinia()
 pinia.use(({store})=>{

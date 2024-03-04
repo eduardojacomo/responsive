@@ -53,32 +53,3 @@ export const useProtocolos = defineStore("protocolos", ()=>{
         respServer
     }
 });
-
-// export const useMetasAdd = defineStore("metasAdd", ()=> {
-    
-//     const metaadicionada=ref([]);
-//     const tempmetas = ref([]);
-
-//     const metasadd = computed(()=> metaadicionada.value);
-        
-//     function setMetasAdd(metasadd){
-//             metaadicionada.value.push(metasadd)
-//             localStorage.setItem("metaadicionadatemp", JSON.stringify(metaadicionada.value));
-//     };
-
-//     function getMetasAdd(){
-//         const storageMetas = localStorage.getItem("metaadicionadatemp");
-//         if (storageMetas){
-//             metaadicionada.value = JSON.parse(storageMetas)
-//             console.log(metaadicionada.value);
-//         }
-//     };
-
-//     return {
-//         getMetasAdd,
-//         setMetasAdd,
-//         metasadd,
-//         metaadicionada
-//     }
-
-// });

@@ -33,7 +33,7 @@ const searchResult = computed(() => {
   if (keyword.value == '' || !metaadicionada){
     return[]
   }
-  
+  console.log(keyword.value);
   const filteredMetas = meta.value.filter((item) => {
     const isNotInMetaAdicionada = !metaadicionada.value.some((metaAdicionada) => metaAdicionada.id === item.id);
     const hasMatchingKeyword = item.metaTerapia.toLowerCase().includes(keyword.value.toLowerCase());
@@ -42,15 +42,7 @@ const searchResult = computed(() => {
   console.log(filteredMetas);
   return filteredMetas;
   });
-
-    // if (meta.value.filter((item)=> {
-      // if (item.metaTerapia.toLowerCase().includes(keyword.value.toLowerCase()) )
-      // {
-      //   console.log('item result print')
-      //   console.log(item)
-      //   return item
-      // }
-
+  
 const isOpen = ref(false);
 
 const setSelected = item =>{
@@ -61,7 +53,7 @@ const setSelected = item =>{
   emit('update:modelValue', keyword.value)
 };
 
-const handleeInput = event =>{
+const handleInput = event =>{
   isOpen.value = true
   keyword.value = event.target.value
   emit('update:modelValue', keyword.value)

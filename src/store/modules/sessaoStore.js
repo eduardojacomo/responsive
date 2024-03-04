@@ -10,8 +10,18 @@ export const useSessao = defineStore("sessao", ()=> {
     const sessaoByPaciente = ref([]);
     //new getters:
     const sessao = computed(()=> sessoes.value);
+    const sessaoData = ref({
+        horaSessao: '',
+        codigoPaciente: 0,
+        codigoProfissional: 1,
+        status: "A",
+        dataSessao: '',
+        registro: '',
+    });
     const sessaobyPaciente = computed(()=> sessaoByPaciente.value);
-
+    // const sessaoTemp = computed(()=> temp.value);
+    const loader = ref(false);
+    const respServer = ref(0);
     //new actions:
     async function getSessoes(){
         try{
@@ -39,13 +49,16 @@ export const useSessao = defineStore("sessao", ()=> {
           }
 
     }
-    async function setSessoes(sessoes){
+    async function setSessoes(sessaoData){
+        
         try{
-            
-            const response = await api.post("/Sessao", sessoes);
-            console.log(response);
+            const response = await api.post("/Sessao", sessaoData);
+            respServer.value = response.status;
+            loader.value = true;
         } catch{
             console.log('Não foi possivel cadastrar a sessao');
+            respServer.value = 404;
+            loader.value = true;
         }
 
     }
@@ -56,7 +69,10 @@ export const useSessao = defineStore("sessao", ()=> {
         getSessoesbyPaciente,
         sessao,
         getSessoes,
-        setSessoes
+        setSessoes,
+        sessaoData, 
+        loader,
+        respServer
     }
     
 });

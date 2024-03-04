@@ -7,9 +7,8 @@ import {pacienteData} from '../../services/pacienteData'
 export const usePacientes = defineStore("pacientes", ()=>{
     const pacientes = ref ([]);
     const pacientebyid = ref ([]);
-    const pcienteselect = reactive({
 
-    })
+
     const idpaciente = ref('');
     const IdPaciente = computed(()=> idpaciente.value);
     const paciente = computed(()=> pacientes.value);
@@ -23,10 +22,10 @@ export const usePacientes = defineStore("pacientes", ()=>{
             pacientes.value=[]
         }
     };
-    async function setPacientes(paciente){
+    async function setPacientes(pacienteData){
         loader.value = false;
         try{
-            const response = await api.post('/Paciente', paciente);
+            const response = await api.post('/Paciente', pacienteData);
             respServer.value = response.status;
             console.log(respServer.value);
             loader.value = true;
@@ -45,10 +44,7 @@ export const usePacientes = defineStore("pacientes", ()=>{
             pacientebyid.value=[]
             pacienteData.value=[]
         }
-        // pacientebyid.value = await pacientes.value.filter((x) =>  x.id === parseInt(idpaciente));
-        // console.log(pacientebyid.value);
-        // pacienteData.nome = await pacientebyid.value.nome;
-        // console.log(pacienteData);   
+ 
      };
 
     return{

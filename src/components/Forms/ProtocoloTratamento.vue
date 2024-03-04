@@ -226,7 +226,7 @@ onBeforeMount(async() => {
             </div>
         
             <div class="metas_add">
-                <AutoComplete v-model="metaselected"/>
+                <AutoComplete v-model="metaselected" :resultmetas="meta" @shouldSearch="getMetas" @select="metaselected"  />
 
                 <div class="metasadd_container">
                     <div  v-for="m in usemetasadd.metaadicionada" :key="m.id" class="box">
